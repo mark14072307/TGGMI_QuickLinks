@@ -1,0 +1,135 @@
+/* Reset & Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Poppins', sans-serif;
+  color: #fff;
+  overflow: hidden;
+}
+
+/* Video Background */
+#bgVideo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
+/* Main Centered Wrapper */
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 1rem;
+}
+
+/* Glass Container */
+.container {
+  max-width: 500px;
+
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  padding: 1.5rem;
+  /* max-width: 420px; */
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+/* Logo and Heading */
+.logo {
+  width: 90px;
+  margin-bottom: 0.2rem;
+}
+h1 {
+  font-family: 'Cinzel', serif;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  line-height: 1.3;
+  color: #ffffff;
+  text-shadow: 0 0 4px rgba(255, 255, 255, 0.2);
+}
+
+/* Cards Layout */
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+
+/* Card with icon + text side-by-side */
+.card {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  text-decoration: none;
+  color: #fff;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.8rem;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.card:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.02);
+  box-shadow: 0 0 10px rgba(0, 255, 204, 0.3);
+}
+.card span {
+  color: #fff;
+  font-size: 0.95rem;
+  flex-grow: 1;
+  text-align: left;
+}
+
+/* Icon style */
+.icon {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+}
+
+/* Credits */
+.credit {
+  font-size: 0.6rem;
+  margin-top: 1.2rem;
+  color: #aaa;
+}
+.credit a {
+  color: #aaa;
+  text-decoration: underline;
+}
+
+/* Entry Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive Tweaks */
+@media (max-width: 600px) {
+  h1 {
+    font-size: 1.1rem;
+  }
+  .icon {
+    width: 32px;
+    height: 32px;
+  }
+  .card span {
+    font-size: 0.9rem;
+  }
+}
