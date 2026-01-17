@@ -1,17 +1,30 @@
-/* Reset & Base */
+/* RESET */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-html, body {
-  height: 100%;
+/* BASE */
+html,
+body {
+  width: 100%;
+  min-height: 100svh;
   font-family: 'Poppins', sans-serif;
   color: #fff;
+  overflow-x: hidden;
 }
 
-/* Background Video */
+/* BACKGROUND FALLBACK (ALWAYS PRESENT) */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: url("images/bg-fallback.jpg") center / cover no-repeat;
+  z-index: -2;
+}
+
+/* BACKGROUND VIDEO */
 #bgVideo {
   position: fixed;
   inset: 0;
@@ -21,38 +34,36 @@ html, body {
   z-index: -1;
 }
 
-/* Mobile Fallback */
-@media (max-width: 480px) {
+/* HIDE VIDEO ON PHONES */
+@media (max-width: 768px) {
   #bgVideo {
     display: none;
   }
-  body {
-    background: url("images/bg-fallback.jpg") center / cover no-repeat;
-  }
 }
 
-/* Layout */
+/* LAYOUT */
 .wrapper {
+  min-height: 100svh;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
   padding: 1rem;
 }
 
+/* GLASS CONTAINER */
 .container {
   max-width: 500px;
   width: 100%;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.82);
   backdrop-filter: blur(12px);
   border-radius: 20px;
-  padding: 1.6rem;
+  padding: 1.4rem;
   text-align: center;
   box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
-  animation: fadeIn 0.8s ease-in-out;
+  animation: fadeIn 0.7s ease-in-out;
 }
 
-/* Header */
+/* HEADER */
 .logo {
   width: 90px;
   margin-bottom: 0.3rem;
@@ -62,13 +73,13 @@ h1 {
   font-family: 'Cinzel', serif;
   font-size: 1.25rem;
   line-height: 1.35;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.5rem;
 }
 
 .tagline {
   font-size: 0.85rem;
   color: #ccc;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.25rem;
 }
 
 .location {
@@ -77,7 +88,7 @@ h1 {
   margin-bottom: 1rem;
 }
 
-/* Cards */
+/* CARDS */
 .cards {
   display: flex;
   flex-direction: column;
@@ -93,13 +104,13 @@ h1 {
   text-decoration: none;
   color: #fff;
   font-size: 0.95rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   transition: all 0.25s ease;
 }
 
 .card:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.12);
   transform: scale(1.02);
 }
 
@@ -111,7 +122,7 @@ h1 {
   outline: 2px solid #cfd8dc;
 }
 
-/* Primary CTA */
+/* PRIMARY CTA */
 .card.primary {
   background: linear-gradient(135deg, #00ffc8, #00bfa6);
   color: #000;
@@ -122,14 +133,14 @@ h1 {
   color: #000;
 }
 
-/* Icons */
+/* ICONS */
 .icon {
   width: 36px;
   height: 36px;
   flex-shrink: 0;
 }
 
-/* Footer */
+/* FOOTER */
 .credit {
   margin-top: 1.2rem;
   font-size: 0.6rem;
@@ -141,7 +152,28 @@ h1 {
   text-decoration: underline;
 }
 
-/* Animation */
+/* SMALL HEIGHT DEVICES */
+@media (max-height: 650px) {
+  .wrapper {
+    align-items: flex-start;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+}
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+  h1 {
+    font-size: 1.1rem;
+  }
+
+  .icon {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* ANIMATION */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -150,16 +182,5 @@ h1 {
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-/* Responsive */
-@media (max-width: 600px) {
-  h1 {
-    font-size: 1.1rem;
-  }
-  .icon {
-    width: 32px;
-    height: 32px;
   }
 }
