@@ -1,186 +1,117 @@
-/* RESET */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* BASE */
-html,
 body {
-  width: 100%;
-  min-height: 100svh;
-  font-family: 'Poppins', sans-serif;
-  color: #fff;
-  overflow-x: hidden;
-}
-
-/* BACKGROUND FALLBACK (ALWAYS PRESENT) */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: url("images/bg-fallback.jpg") center / cover no-repeat;
-  z-index: -2;
-}
-
-/* BACKGROUND VIDEO */
-#bgVideo {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: -1;
-}
-
-/* HIDE VIDEO ON PHONES */
-@media (max-width: 768px) {
-  #bgVideo {
-    display: none;
-  }
-}
-
-/* LAYOUT */
-.wrapper {
   min-height: 100svh;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  background: linear-gradient(145deg, #1b1f24, #0f1114);
+  font-family: 'Poppins', sans-serif;
+  color: #fff;
   padding: 1rem;
 }
 
-/* GLASS CONTAINER */
-.container {
-  max-width: 500px;
+.card {
   width: 100%;
-  background: rgba(0, 0, 0, 0.82);
-  backdrop-filter: blur(12px);
-  border-radius: 20px;
-  padding: 1.4rem;
-  text-align: center;
-  box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
-  animation: fadeIn 0.7s ease-in-out;
+  max-width: 420px;
+  background: #111418;
+  border-radius: 18px;
+  padding: 1.6rem;
+  box-shadow: 0 0 30px rgba(0,0,0,0.6);
 }
 
-/* HEADER */
+.header {
+  text-align: center;
+  margin-bottom: 1.2rem;
+}
+
 .logo {
-  width: 90px;
-  margin-bottom: 0.3rem;
+  width: 80px;
+  margin-bottom: 0.4rem;
 }
 
 h1 {
   font-family: 'Cinzel', serif;
-  font-size: 1.25rem;
-  line-height: 1.35;
-  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
 }
 
-.tagline {
-  font-size: 0.85rem;
+.subtitle {
+  font-size: 0.8rem;
+  color: #bbb;
+}
+
+/* Services */
+.services {
+  font-size: 0.8rem;
   color: #ccc;
-  margin-bottom: 0.25rem;
+  display: grid;
+  gap: 0.3rem;
+  margin-bottom: 1.2rem;
 }
 
-.location {
-  font-size: 0.7rem;
-  color: #aaa;
-  margin-bottom: 1rem;
-}
-
-/* CARDS */
-.cards {
-  display: flex;
-  flex-direction: column;
+/* Contact rows */
+.info {
+  display: grid;
   gap: 0.6rem;
 }
 
-.card {
+.info-row {
   display: flex;
   align-items: center;
   gap: 0.8rem;
-  padding: 0.8rem 1rem;
-  border-radius: 12px;
+  background: rgba(255,255,255,0.06);
+  padding: 0.7rem;
+  border-radius: 10px;
   text-decoration: none;
   color: #fff;
-  font-size: 0.95rem;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  transition: all 0.25s ease;
+  transition: background 0.2s ease;
 }
 
-.card:hover {
-  background: rgba(255, 255, 255, 0.12);
-  transform: scale(1.02);
+.info-row:hover {
+  background: rgba(255,255,255,0.12);
 }
 
-.card:active {
-  transform: scale(0.98);
+.info-row strong {
+  font-size: 0.75rem;
 }
 
-.card:focus-visible {
-  outline: 2px solid #cfd8dc;
+.info-row span {
+  font-size: 0.7rem;
+  color: #ccc;
 }
 
-/* PRIMARY CTA */
-.card.primary {
-  background: linear-gradient(135deg, #00ffc8, #00bfa6);
-  color: #000;
-  font-weight: 600;
-}
-
-.card.primary span {
-  color: #000;
-}
-
-/* ICONS */
+/* Icons */
 .icon {
-  width: 36px;
-  height: 36px;
-  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
 }
 
-/* FOOTER */
-.credit {
+/* Social icons */
+.social {
   margin-top: 1.2rem;
-  font-size: 0.6rem;
-  color: #aaa;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
 }
 
-.credit a {
-  color: #aaa;
-  text-decoration: underline;
+.social img {
+  width: 30px;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
 }
 
-/* SMALL HEIGHT DEVICES */
-@media (max-height: 650px) {
-  .wrapper {
-    align-items: flex-start;
-    padding-top: 1.5rem;
-    padding-bottom: 1.5rem;
-  }
+.social img:hover {
+  opacity: 1;
 }
 
-/* RESPONSIVE */
-@media (max-width: 600px) {
-  h1 {
-    font-size: 1.1rem;
-  }
-
-  .icon {
-    width: 32px;
-    height: 32px;
-  }
-}
-
-/* ANIMATION */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Footer */
+footer {
+  margin-top: 1.2rem;
+  font-size: 0.65rem;
+  text-align: center;
+  color: #888;
 }
