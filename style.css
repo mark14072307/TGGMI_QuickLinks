@@ -1,117 +1,176 @@
+/* RESET */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-body {
+/* BASE */
+html, body {
+  width: 100%;
   min-height: 100svh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(145deg, #1b1f24, #0f1114);
   font-family: 'Poppins', sans-serif;
   color: #fff;
+  overflow-x: hidden;
+}
+
+/* BACKGROUND FALLBACK */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: url("images/bg-fallback.jpg") center / cover no-repeat;
+  z-index: -2;
+}
+
+/* VIDEO */
+#bgVideo {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
+@media (max-width: 768px) {
+  #bgVideo {
+    display: none;
+  }
+}
+
+/* LAYOUT */
+.wrapper {
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 1rem;
 }
 
-.card {
+/* CONTAINER */
+.container {
+  max-width: 500px;
   width: 100%;
-  max-width: 420px;
-  background: #111418;
-  border-radius: 18px;
-  padding: 1.6rem;
-  box-shadow: 0 0 30px rgba(0,0,0,0.6);
+  background: rgba(0, 0, 0, 0.82);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: 0 0 25px rgba(0,0,0,0.5);
 }
 
+/* HEADER */
 .header {
   text-align: center;
-  margin-bottom: 1.2rem;
+  margin-bottom: 1rem;
 }
 
 .logo {
-  width: 80px;
-  margin-bottom: 0.4rem;
+  width: 90px;
+  margin-bottom: 0.3rem;
 }
 
 h1 {
   font-family: 'Cinzel', serif;
-  font-size: 1.2rem;
+  font-size: 1.25rem;
+  margin-bottom: 0.4rem;
 }
 
-.subtitle {
-  font-size: 0.8rem;
-  color: #bbb;
-}
-
-/* Services */
-.services {
-  font-size: 0.8rem;
+.tagline {
+  font-size: 0.85rem;
   color: #ccc;
-  display: grid;
-  gap: 0.3rem;
-  margin-bottom: 1.2rem;
 }
 
-/* Contact rows */
-.info {
+.location {
+  font-size: 0.7rem;
+  color: #aaa;
+  margin-bottom: 1rem;
+}
+
+/* CONTACT SECTION */
+.contact {
   display: grid;
   gap: 0.6rem;
+  margin-bottom: 1rem;
 }
 
-.info-row {
+.contact-row {
   display: flex;
-  align-items: center;
   gap: 0.8rem;
+  align-items: center;
   background: rgba(255,255,255,0.06);
   padding: 0.7rem;
-  border-radius: 10px;
+  border-radius: 12px;
   text-decoration: none;
   color: #fff;
-  transition: background 0.2s ease;
 }
 
-.info-row:hover {
-  background: rgba(255,255,255,0.12);
-}
-
-.info-row strong {
+.contact-row strong {
   font-size: 0.75rem;
 }
 
-.info-row span {
+.contact-row span {
   font-size: 0.7rem;
   color: #ccc;
 }
 
-/* Icons */
-.icon {
-  width: 34px;
-  height: 34px;
-}
-
-/* Social icons */
-.social {
-  margin-top: 1.2rem;
+/* ACTION CARDS */
+.cards {
   display: flex;
-  justify-content: center;
-  gap: 1rem;
+  flex-direction: column;
+  gap: 0.6rem;
 }
 
-.social img {
-  width: 30px;
-  opacity: 0.8;
-  transition: opacity 0.2s ease;
+.card {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  text-decoration: none;
+  color: #fff;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  transition: all 0.25s ease;
 }
 
-.social img:hover {
-  opacity: 1;
+.card:hover {
+  background: rgba(255,255,255,0.12);
+  transform: scale(1.02);
 }
 
-/* Footer */
-footer {
+.card.primary {
+  background: linear-gradient(135deg, #00ffc8, #00bfa6);
+  color: #000;
+  font-weight: 600;
+}
+
+.card.primary span {
+  color: #000;
+}
+
+/* ICONS */
+.icon {
+  width: 36px;
+  height: 36px;
+}
+
+/* FOOTER */
+.credit {
   margin-top: 1.2rem;
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   text-align: center;
-  color: #888;
+  color: #aaa;
+}
+
+.credit a {
+  color: #aaa;
+}
+
+/* SMALL HEIGHT PHONES */
+@media (max-height: 650px) {
+  .wrapper {
+    align-items: flex-start;
+    padding-top: 1.5rem;
+  }
 }
