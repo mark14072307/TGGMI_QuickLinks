@@ -3,65 +3,538 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TG German Metalcraft Industries Private Limited</title>
+  <title>TG German Metalcraft Industries Pvt Ltd</title>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Rajdhani:wght@400;500;600;700&family=Titillium+Web:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --black:   #0b0c0f;
+      --dark:    #111318;
+      --card:    #16191f;
+      --blue:    #0b2b77;
+      --blue2:   #113486;
+      --spark:   #2a54b7;
+      --white:   #f0f4fa;
+      --silver:  #b8c8d8;
+      --muted:   #6a7a8c;
+      --border:  rgba(29,107,214,0.22);
+    }
 
-  <!-- Styles -->
-  <link rel="stylesheet" href="style.css" />
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; font-family: 'Titillium Web', sans-serif; color: var(--white); overflow-x: hidden; }
 
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    /* Noise texture overlay */
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 999; opacity: .4;
+    }
+
+    /* Video Background */
+    #bgVideo {
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover; z-index: 0;
+    }
+
+    /* Dark overlay matching hero-overlay */
+    .bg-overlay {
+      position: fixed; inset: 0; z-index: 1; pointer-events: none;
+      background:
+        linear-gradient(to bottom, rgba(7,9,14,0.92) 0%, rgba(7,9,14,0.75) 50%, rgba(7,9,14,0.92) 100%),
+        linear-gradient(to right, rgba(7,9,14,0.85) 0%, rgba(7,9,14,0.55) 50%, rgba(7,9,14,0.85) 100%);
+    }
+
+    /* Left edge glow accent */
+    .edge-glow {
+      position: fixed; left: 0; top: 0; bottom: 0; width: 4px; z-index: 2;
+      background: linear-gradient(to bottom, transparent, var(--blue2), var(--blue), transparent);
+      opacity: .7; animation: glowMove 4s ease-in-out infinite;
+    }
+    /* Right edge glow */
+    .edge-glow-right {
+      position: fixed; right: 0; top: 0; bottom: 0; width: 4px; z-index: 2;
+      background: linear-gradient(to bottom, transparent, var(--spark), var(--blue2), transparent);
+      opacity: .4; animation: glowMove 4s ease-in-out infinite reverse;
+    }
+    @keyframes glowMove { 0%,100%{opacity:.3} 50%{opacity:.8} }
+
+    /* Page wrapper */
+    .page {
+      position: relative; z-index: 10;
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    /* Main card container */
+    .container {
+      width: 100%; max-width: 460px;
+      background: rgba(11,12,15,0.82);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      backdrop-filter: blur(18px);
+      overflow: hidden;
+      animation: fadeIn 0.9s cubic-bezier(.2,.65,.3,1) forwards;
+      opacity: 0; transform: translateY(24px);
+      box-shadow: 0 8px 48px rgba(0,0,0,0.7), 0 0 0 1px rgba(29,107,214,0.1);
+    }
+    @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+
+    /* Top accent bar */
+    .accent-bar {
+      height: 3px;
+      background: linear-gradient(90deg, var(--blue) 0%, var(--spark) 50%, var(--blue2) 100%);
+      position: relative; overflow: hidden;
+    }
+    .accent-bar::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,.35) 50%, transparent 100%);
+      animation: shimmer 2.8s ease-in-out infinite;
+    }
+    @keyframes shimmer { 0%,100%{transform:translateX(-100%)} 50%{transform:translateX(100%)} }
+
+    /* Header section */
+    .header {
+      padding: 2rem 2rem 1.4rem;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+
+    /* Eyebrow label */
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      color: var(--spark); font-size: 9px; letter-spacing: 3px;
+      text-transform: uppercase; font-weight: 700; margin-bottom: 14px;
+    }
+    .eyebrow-line { width: 22px; height: 2px; background: var(--spark); }
+
+    .logo-wrap {
+      width: 88px; height: 88px;
+      margin: 0 auto 14px;
+      background: linear-gradient(135deg, rgba(17,52,134,0.25), rgba(11,43,119,0.1));
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      display: grid; place-items: center;
+      position: relative; overflow: hidden;
+      transition: border-color .3s;
+    }
+    .logo-wrap:hover { border-color: var(--spark); }
+    .logo-wrap::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(42,84,183,0.08), transparent);
+      pointer-events: none;
+    }
+    .logo-wrap img {
+      width: 68px; height: 68px; object-fit: contain;
+      position: relative; z-index: 1;
+    }
+    .logo-hex-fallback {
+      font-family: 'Anton', sans-serif; font-size: 28px;
+      color: var(--white); letter-spacing: 2px;
+      display: none; position: relative; z-index: 1;
+    }
+
+    .company-name {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(18px, 5vw, 24px);
+      letter-spacing: 3px; text-transform: uppercase; line-height: 1;
+      margin-bottom: 4px;
+    }
+    .company-name .tg { 
+      background: linear-gradient(90deg, #5b8fff, #2a54b7);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .company-sub {
+      font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--spark); font-weight: 700; margin-bottom: 10px;
+    }
+    .company-tagline {
+      font-size: 11px; letter-spacing: 1px; color: var(--muted);
+      font-weight: 300; line-height: 1.6;
+    }
+    .company-tagline strong { color: var(--silver); font-weight: 600; }
+
+    /* Status badge */
+    .status-row {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      margin-top: 12px;
+    }
+    .status-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 8px; letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--spark); font-weight: 700; padding: 4px 10px;
+      border: 1px solid rgba(42,84,183,0.4); border-radius: 2px;
+      background: rgba(42,84,183,0.08);
+    }
+    .status-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: #3ddc84; box-shadow: 0 0 6px #3ddc84;
+      animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+    /* Section label inside cards area */
+    .sec-label {
+      padding: 1.2rem 2rem 0.6rem;
+      font-size: 8px; letter-spacing: 3.5px; text-transform: uppercase;
+      color: var(--spark); font-weight: 700;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .sec-label::before { content: '//'; color: var(--blue2); opacity: .7; }
+
+    /* Links list */
+    .links { padding: 0 1.2rem 1.2rem; display: flex; flex-direction: column; gap: 6px; }
+
+    .link-card {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      text-decoration: none;
+      color: var(--white);
+      position: relative; overflow: hidden;
+      transition: background .25s, border-color .25s, transform .18s;
+      cursor: pointer;
+    }
+    .link-card::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+      background: var(--blue2); transform: scaleY(0); transform-origin: bottom;
+      transition: transform .3s cubic-bezier(.4,0,.2,1);
+    }
+    .link-card:hover { background: #1c2130; border-color: rgba(42,84,183,0.45); transform: translateX(4px); }
+    .link-card:hover::before { transform: scaleY(1); }
+
+    /* Shimmer on hover */
+    .link-card::after {
+      content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,.04), transparent);
+      transition: left .55s;
+    }
+    .link-card:hover::after { left: 100%; }
+
+    .link-icon-wrap {
+      width: 40px; height: 40px; flex-shrink: 0;
+      border-radius: 2px;
+      background: rgba(23,86,184,0.12);
+      border: 1px solid var(--border);
+      display: grid; place-items: center;
+      transition: border-color .25s, background .25s;
+    }
+    .link-card:hover .link-icon-wrap {
+      border-color: var(--blue2); background: rgba(23,86,184,0.25);
+    }
+    .link-icon-wrap img { width: 22px; height: 22px; object-fit: contain; }
+
+    .link-text { flex: 1; min-width: 0; }
+    .link-name {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 14px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--white); line-height: 1;
+      margin-bottom: 2px;
+    }
+    .link-desc { font-size: 10px; letter-spacing: .5px; color: var(--muted); font-weight: 300; }
+
+    .link-arrow {
+      font-size: 16px; color: var(--muted);
+      transition: color .2s, transform .2s;
+      flex-shrink: 0;
+    }
+    .link-card:hover .link-arrow { color: var(--spark); transform: translateX(3px); }
+
+    /* Number badge */
+    .link-num {
+      position: absolute; top: 8px; right: 44px;
+      font-family: 'Anton', sans-serif; font-size: 28px;
+      color: rgba(29,107,214,0.06); line-height: 1; pointer-events: none;
+    }
+
+    /* Divider */
+    .links-divider {
+      height: 1px; background: var(--border); margin: 4px 0;
+    }
+
+    /* Footer strip */
+    .footer-strip {
+      border-top: 1px solid var(--border);
+      padding: 1rem 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 8px;
+    }
+    .footer-text {
+      font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--muted); font-weight: 600;
+    }
+    .footer-credit {
+      font-size: 9px; color: var(--muted);
+    }
+    .footer-credit a { color: var(--muted); text-decoration: underline; }
+
+    /* Bottom watermark */
+    .watermark {
+      position: fixed; bottom: -30px; right: -20px; z-index: 3;
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(60px, 14vw, 130px);
+      letter-spacing: 10px;
+      color: rgba(17,52,134,0.04);
+      pointer-events: none; white-space: nowrap;
+      transform: rotate(-8deg);
+    }
+
+    /* Redirect countdown banner */
+    .redirect-banner {
+      background: rgba(17,52,134,0.18);
+      border-bottom: 1px solid var(--border);
+      padding: 9px 2rem;
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      flex-wrap: wrap;
+    }
+    .redirect-text {
+      font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--muted); font-weight: 600;
+    }
+    .redirect-text span { color: var(--spark); font-weight: 700; }
+    .redirect-cancel {
+      font-size: 8px; letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--muted); font-weight: 700; cursor: pointer;
+      padding: 3px 8px; border: 1px solid rgba(42,84,183,0.3); border-radius: 2px;
+      background: transparent; transition: color .2s, border-color .2s;
+      flex-shrink: 0;
+    }
+    .redirect-cancel:hover { color: var(--silver); border-color: var(--spark); }
+    .redirect-progress {
+      position: absolute; bottom: 0; left: 0; height: 2px;
+      background: linear-gradient(90deg, var(--blue), var(--spark));
+      width: 100%; transform-origin: left;
+      animation: countdownBar 5s linear forwards;
+    }
+    @keyframes countdownBar { from{transform:scaleX(1)} to{transform:scaleX(0)} }
+    .redirect-banner { position: relative; overflow: hidden; }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .header { padding: 1.5rem 1.5rem 1.2rem; }
+      .links { padding: 0 0.9rem 0.9rem; }
+      .sec-label { padding: 1rem 0.9rem 0.5rem; }
+      .footer-strip { padding: 0.9rem 1rem; }
+    }
+  </style>
 </head>
 <body>
 
   <!-- Background Video -->
   <video autoplay muted loop playsinline id="bgVideo">
-    <source src="/back.mp4" type="video/mp4" />
+    <source src="back.mp4" type="video/mp4" />
+    <!-- Fallback: if no video, background shows dark -->
   </video>
+  <div class="bg-overlay"></div>
+  <div class="edge-glow"></div>
+  <div class="edge-glow-right"></div>
+  <div class="watermark">TGGMI</div>
 
-  <div class="wrapper">
+  <div class="page">
     <div class="container">
 
-      <!-- Logo and Heading -->
-      <header>
-        <img src="images/logo.png" alt="Logo" class="logo" />
-        <h1>TG German Metalcraft Industries Private Limited</h1>
-      </header>
+      <!-- Top accent bar -->
+      <div class="accent-bar"></div>
 
-      <!-- Link Cards -->
-      <section class="cards">
-        <a href="https://tggerman.vercel.app/" target="_blank" class="card">
-          <img src="images/icons8-webpage-48.png" alt="Website" class="icon" />
-          <span>Website</span>
-        </a>
-        <a href="https://www.instagram.com/tg_germanmetalcraft/profilecard/?igsh=MWMwcTJlYng1ZG9kMQ==" target="_blank" class="card">
-          <img src="images/icons8-instagram-48.png" alt="Instagram" class="icon" />
-          <span>Instagram</span>
-        </a>
-        <a href="https://www.facebook.com/share/16itsnsCTs/" target="_blank" class="card">
-          <img src="images/facebook.png" alt="Facebook" class="icon" />
-          <span>Facebook</span>
-        </a>
-        <a href="https://maps.app.goo.gl/5fDtDsxV2wagqL956" target="_blank" class="card">
-          <img src="images/icons8-google-maps-48.png" alt="Location" class="icon" />
-          <span>Location</span>
-        </a>
-        <a href="https://share.google/qTNzDhfnwqQyn6JeO" target="_blank" class="card">
-          <img src="images/google.png" alt="Google Page" class="icon" />
-          <span>Google Page</span>
-        </a>
-        <a href="https://Wa.me/+918077887830" target="_blank" class="card">
-          <img src="images/icons8-whatsapp-48.png" alt="WhatsApp" class="icon" />
-          <span>WhatsApp</span>
-        </a>
-      </section>
+      <!-- Redirect countdown banner -->
+      <div class="redirect-banner" id="redirectBanner">
+        <div class="redirect-text">Redirecting to website in <span id="countdown">5</span>s</div>
+        <button class="redirect-cancel" id="redirectCancel" onclick="cancelRedirect()">Cancel ✕</button>
+        <div class="redirect-progress" id="redirectProgress"></div>
+      </div>
 
-      <!-- Credit -->
-      <div class="credit">
-        Icons by <a href="https://icons8.com/" target="_blank">Icons8</a>
+      <!-- Header -->
+      <div class="header">
+        <div class="eyebrow">
+          <span class="eyebrow-line"></span>
+          German Engineering · Made in India
+          <span class="eyebrow-line"></span>
+        </div>
+
+        <div class="logo-wrap">
+          <img src="images/logo.png" alt="TG German Metalcraft Logo"
+            onerror="this.style.display='none'; document.getElementById('hexFallback').style.display='block';">
+          <span class="logo-hex-fallback" id="hexFallback">TG</span>
+        </div>
+
+        <div class="company-name"><span class="tg">TG</span> German Metalcraft</div>
+        <div class="company-sub">Industries Pvt Ltd · Precision Metal Fabrication</div>
+        <div class="company-tagline">
+          <strong>DIN Quality Standards</strong> · Welded Assemblies · Contract Manufacturing
+        </div>
+
+        <div class="status-row">
+          <div class="status-badge">
+            <div class="status-dot"></div>
+            DIN Aligned · ISO Quality
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="sec-label">Quick Links</div>
+      <div class="links">
+
+        <a href="https://tggerman.vercel.app/" target="_blank" class="link-card">
+          <div class="link-num">01</div>
+          <div class="link-icon-wrap">
+            <svg width="22" height="22" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="48" height="48" rx="4" fill="none"/>
+              <circle cx="24" cy="24" r="18" stroke="#2a54b7" stroke-width="2.5" fill="none"/>
+              <ellipse cx="24" cy="24" rx="8" ry="18" stroke="#2a54b7" stroke-width="2" fill="none"/>
+              <line x1="6" y1="24" x2="42" y2="24" stroke="#2a54b7" stroke-width="2"/>
+              <line x1="8" y1="16" x2="40" y2="16" stroke="#2a54b7" stroke-width="1.5"/>
+              <line x1="8" y1="32" x2="40" y2="32" stroke="#2a54b7" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div class="link-text">
+            <div class="link-name">Website</div>
+            <div class="link-desc">tggerman.vercel.app · Full company profile</div>
+          </div>
+          <span class="link-arrow">→</span>
+        </a>
+
+        <a href="https://Wa.me/+918077887830" target="_blank" class="link-card">
+          <div class="link-num">02</div>
+          <div class="link-icon-wrap">
+            <svg width="22" height="22" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M24 4C13 4 4 13 4 24c0 3.6.97 7 2.65 9.9L4 44l10.4-2.7A19.94 19.94 0 0024 44c11 0 20-9 20-20S35 4 24 4z" fill="#25D366"/>
+              <path d="M35 29.2c-.5-.25-2.9-1.43-3.35-1.6-.45-.16-.77-.24-1.1.25-.32.5-1.26 1.6-1.55 1.92-.28.33-.57.37-1.06.12-.5-.25-2.1-.77-4-2.46-1.47-1.3-2.47-2.92-2.76-3.41-.28-.5-.03-.76.22-1.01.22-.22.5-.57.74-.86.24-.28.32-.5.48-.82.16-.33.08-.62-.04-.87-.12-.24-1.1-2.64-1.5-3.62-.4-.94-.8-.82-1.1-.83h-.93c-.32 0-.83.12-1.27.6-.43.48-1.66 1.62-1.66 3.96s1.7 4.59 1.94 4.91c.24.32 3.35 5.1 8.1 7.16.96.41 1.7.66 2.28.84.96.3 1.83.26 2.52.16.77-.11 2.37-.97 2.7-1.9.33-.94.33-1.74.23-1.9-.1-.18-.42-.3-.9-.54z" fill="white"/>
+            </svg>
+          </div>
+          <div class="link-text">
+            <div class="link-name">WhatsApp</div>
+            <div class="link-desc">+91 80778 87830 · Instant enquiry</div>
+          </div>
+          <span class="link-arrow">→</span>
+        </a>
+
+        <div class="links-divider"></div>
+
+        <a href="https://www.instagram.com/tg_germanmetalcraft/profilecard/?igsh=MWMwcTJlYng1ZG9kMQ==" target="_blank" class="link-card">
+          <div class="link-num">03</div>
+          <div class="link-icon-wrap">
+            <svg width="22" height="22" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <radialGradient id="ig1" cx="19%" cy="99%" r="109%">
+                <stop offset="0%" stop-color="#ffd600"/>
+                <stop offset="50%" stop-color="#ff0100"/>
+                <stop offset="100%" stop-color="#d800b9"/>
+              </radialGradient>
+              <radialGradient id="ig2" cx="11%" cy="0%" r="150%">
+                <stop offset="0%" stop-color="#8400ff"/>
+                <stop offset="100%" stop-color="#8400ff" stop-opacity="0"/>
+              </radialGradient>
+              <rect x="3" y="3" width="42" height="42" rx="12" fill="url(#ig1)"/>
+              <rect x="3" y="3" width="42" height="42" rx="12" fill="url(#ig2)"/>
+              <circle cx="24" cy="24" r="8.5" stroke="white" stroke-width="2.5" fill="none"/>
+              <circle cx="35" cy="13" r="2.5" fill="white"/>
+            </svg>
+          </div>
+          <div class="link-text">
+            <div class="link-name">Instagram</div>
+            <div class="link-desc">@tg_germanmetalcraft · Projects & updates</div>
+          </div>
+          <span class="link-arrow">→</span>
+        </a>
+
+        <a href="https://www.facebook.com/share/16itsnsCTs/" target="_blank" class="link-card">
+          <div class="link-num">04</div>
+          <div class="link-icon-wrap">
+            <svg width="22" height="22" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="3" width="42" height="42" rx="8" fill="#1877F2"/>
+              <path d="M31 9h-4a7 7 0 00-7 7v4h-4v6h4v14h6V26h4l1-6h-5v-3a1 1 0 011-1h4V9z" fill="white"/>
+            </svg>
+          </div>
+          <div class="link-text">
+            <div class="link-name">Facebook</div>
+            <div class="link-desc">TG German Metalcraft · Follow us</div>
+          </div>
+          <span class="link-arrow">→</span>
+        </a>
+
+        <div class="links-divider"></div>
+
+        <a href="https://maps.app.goo.gl/5fDtDsxV2wagqL956" target="_blank" class="link-card">
+          <div class="link-num">05</div>
+          <div class="link-icon-wrap">
+            <svg width="22" height="22" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M24 4C16.27 4 10 10.27 10 18c0 10.5 14 26 14 26s14-15.5 14-26c0-7.73-6.27-14-14-14z" fill="#EA4335"/>
+              <circle cx="24" cy="18" r="5" fill="white"/>
+              <ellipse cx="24" cy="42" rx="8" ry="2" fill="#00000022"/>
+            </svg>
+          </div>
+          <div class="link-text">
+            <div class="link-name">Location</div>
+            <div class="link-desc">Central Hope Town, Uttarakhand · Get directions</div>
+          </div>
+          <span class="link-arrow">→</span>
+        </a>
+
+        <a href="https://share.google/qTNzDhfnwqQyn6JeO" target="_blank" class="link-card">
+          <div class="link-num">06</div>
+          <div class="link-icon-wrap">
+            <svg width="22" height="22" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M43.6 20H24v8h11.3C33.6 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.7 1.1 7.8 2.9l5.7-5.7C34.1 6.7 29.3 5 24 5 12.4 5 3 14.4 3 26s9.4 21 21 21c12 0 21-9 21-21 0-1-.1-2-.4-6z" fill="#4285F4"/>
+              <path d="M5.4 14.7l6.6 4.8C13.8 16.1 18.6 13 24 13c3 0 5.7 1.1 7.8 2.9l5.7-5.7C34.1 6.7 29.3 5 24 5c-7.8 0-14.5 4.1-18.6 9.7z" fill="#EA4335"/>
+              <path d="M24 47c5.2 0 9.9-1.8 13.6-4.7l-6.3-5.2C29.3 38.7 26.8 39.5 24 39.5c-5.2 0-9.6-3.3-11.3-8L6 36.7C9.8 42.5 16.5 47 24 47z" fill="#34A853"/>
+              <path d="M43.6 20H24v8h11.3c-.8 2.3-2.3 4.3-4.3 5.7l6.3 5.2C41.4 35.4 44 31 44 26c0-1-.1-2-.4-6z" fill="#FBBC05"/>
+            </svg>
+          </div>
+          <div class="link-text">
+            <div class="link-name">Google Page</div>
+            <div class="link-desc">Reviews & business profile</div>
+          </div>
+          <span class="link-arrow">→</span>
+        </a>
+
+      </div>
+
+      <!-- Footer strip -->
+      <div class="footer-strip">
+        <span class="footer-text">© 2026 TG German Metalcraft Industries Pvt Ltd</span>
+        <span class="footer-credit">Icons by <a href="https://icons8.com/" target="_blank">Icons8</a></span>
       </div>
 
     </div>
   </div>
 
+  <script>
+    (function() {
+      var WEBSITE = 'https://tggerman.vercel.app/';
+      var seconds = 5;
+      var timer = null;
+      var cancelled = false;
+      var countEl = document.getElementById('countdown');
+      var banner = document.getElementById('redirectBanner');
+      var progressEl = document.getElementById('redirectProgress');
+
+      function tick() {
+        seconds--;
+        if (countEl) countEl.textContent = seconds;
+        if (seconds <= 0) {
+          clearInterval(timer);
+          if (!cancelled) window.location.href = WEBSITE;
+        }
+      }
+
+      timer = setInterval(tick, 1000);
+
+      window.cancelRedirect = function() {
+        cancelled = true;
+        clearInterval(timer);
+        if (progressEl) progressEl.style.animation = 'none';
+        if (banner) {
+          banner.style.background = 'rgba(106,122,140,0.08)';
+          var textEl = banner.querySelector('.redirect-text');
+          if (textEl) textEl.innerHTML = 'Redirect cancelled';
+          var cancelBtn = document.getElementById('redirectCancel');
+          if (cancelBtn) cancelBtn.style.display = 'none';
+        }
+      };
+    })();
+  </script>
 </body>
-</html>/* Reset & Base Styles */
+</html>
