@@ -85,15 +85,15 @@
       gap: 0;
     }
 
-    /* ── Redirect bar — top of page, outside card ── */
+    /* ── Redirect bar — bottom of page ── */
     .redirect-bar {
-      position: fixed; top: 2px; left: 0; right: 0; z-index: 20;
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 20;
       display: flex; align-items: center; justify-content: center;
       gap: 14px;
       padding: 9px 20px;
       background: rgba(17,52,134,0.92);
       backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(42,84,183,0.5);
+      border-top: 1px solid rgba(42,84,183,0.5);
     }
     .redirect-text {
       font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
@@ -115,7 +115,7 @@
     }
     .redirect-cancel:hover { color: #fff; border-color: var(--spark); }
     .redirect-progress {
-      position: absolute; bottom: 0; left: 0; height: 2px;
+      position: absolute; top: 0; left: 0; height: 2px;
       background: linear-gradient(90deg, var(--spark), #5b8fff);
       width: 100%; transform-origin: left;
       animation: drain 5s linear forwards;
