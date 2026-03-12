@@ -154,7 +154,7 @@
     /* Header */
     .header {
       flex-shrink: 0;
-      padding: clamp(14px,3vh,22px) 20px clamp(10px,2vh,16px);
+      padding: clamp(10px,2.2vh,20px) 20px clamp(8px,1.6vh,14px);
       text-align: center;
       border-bottom: 1px solid var(--border);
     }
@@ -167,9 +167,9 @@
 
     /* Logo — no box */
     .logo-wrap {
-      width: clamp(64px,14vw,84px);
-      height: clamp(64px,14vw,84px);
-      margin: 0 auto clamp(8px,1.5vh,12px);
+      width: clamp(52px,11vw,76px);
+      height: clamp(52px,11vw,76px);
+      margin: 0 auto clamp(6px,1.2vh,10px);
       display: grid; place-items: center;
       filter: drop-shadow(0 4px 18px rgba(42,84,183,0.4));
       transition: filter .3s;
@@ -201,7 +201,7 @@
     /* Section label */
     .sec-label {
       flex-shrink: 0;
-      padding: clamp(8px,1.5vh,12px) 14px clamp(4px,1vh,8px);
+      padding: clamp(6px,1.2vh,10px) 14px clamp(3px,0.8vh,6px);
       font-size: 7px; letter-spacing: 3px; text-transform: uppercase;
       color: var(--spark); font-weight: 700;
       display: flex; align-items: center; gap: 7px;
@@ -219,7 +219,7 @@
 
     .link-card {
       display: flex; align-items: center; gap: 12px;
-      padding: clamp(9px,1.6vh,13px) 13px;
+      padding: clamp(8px,1.4vh,12px) 13px;
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 2px;
@@ -275,27 +275,64 @@
     .footer {
       flex-shrink: 0;
       border-top: 1px solid var(--border);
-      padding: clamp(7px,1.2vh,10px) 14px;
+      padding: clamp(6px,1vh,9px) 14px;
       display: flex; align-items: center; justify-content: space-between; gap: 8px;
       flex-wrap: wrap;
     }
     .footer p { font-size: 8px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
-    .footer span { font-size: 8px; color: var(--muted); }
-    .footer a { color: var(--muted); text-decoration: underline; }
+    .footer span { font-size: 8px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
 
-    /* Very short screens */
-    @media (max-height: 660px) {
+    /* Tablet / small desktop */
+    @media (max-height: 780px) {
       .header { padding: 10px 20px 8px; }
-      .logo-wrap { width: 52px; height: 52px; margin-bottom: 7px; }
-      .eyebrow { margin-bottom: 8px; }
-      .links { gap: 4px; }
-      .link-card { padding: 8px 12px; }
+      .logo-wrap { width: 58px; height: 58px; margin-bottom: 6px; }
+      .eyebrow { margin-bottom: 8px; font-size: 7px; }
+      .company-name { font-size: 18px; }
+      .sec-label { padding: 7px 14px 4px; }
+      .links { gap: 4px; padding-bottom: 10px; }
+      .link-card { padding: 9px 12px; }
+      .footer { padding: 6px 14px; }
     }
-    @media (max-height: 560px) {
+
+    /* Typical mobile (667px–740px height) */
+    @media (max-height: 700px) {
+      .header { padding: 8px 20px 7px; }
+      .logo-wrap { width: 50px; height: 50px; margin-bottom: 5px; }
+      .eyebrow { margin-bottom: 6px; font-size: 7px; }
+      .company-name { font-size: 16px; letter-spacing: 2px; }
+      .company-sub { font-size: 7px; letter-spacing: 2px; }
+      .sec-label { padding: 5px 14px 3px; font-size: 7px; }
+      .links { gap: 3px; padding: 0 8px 8px; }
+      .link-card { padding: 8px 11px; gap: 10px; }
+      .link-icon { width: 28px; height: 28px; }
+      .link-icon svg { width: 22px; height: 22px; }
+      .link-name { font-size: 12px; }
+      .link-desc { font-size: 9px; }
+      .links-div { margin: 0; }
+      .footer { padding: 5px 12px; }
+    }
+
+    /* Short mobile (< 640px height — e.g. iPhone SE, small Androids) */
+    @media (max-height: 640px) {
       .eyebrow { display: none; }
+      .header { padding: 8px 16px 6px; }
+      .logo-wrap { width: 42px; height: 42px; margin-bottom: 4px; }
+      .company-name { font-size: 15px; }
       .company-sub { display: none; }
+      .redirect-strip { padding: 4px 12px; }
+      .sec-label { padding: 4px 12px 2px; }
+      .links { gap: 3px; padding: 0 7px 7px; }
+      .link-card { padding: 7px 10px; }
+    }
+
+    /* Very short (landscape or tiny screens) */
+    @media (max-height: 520px) {
       .redirect-strip { display: none; }
       .footer { display: none; }
+      .eyebrow { display: none; }
+      .company-sub { display: none; }
+      .links { gap: 2px; }
+      .link-card { padding: 6px 10px; }
     }
   </style>
 </head>
@@ -448,7 +485,7 @@
 
       <div class="footer">
         <p>© 2026 TG German Metalcraft Industries Pvt Ltd</p>
-        <span>Icons by <a href="https://icons8.com/" target="_blank">Icons8</a></span>
+        <span>Designed for excellence · Built in India</span>
       </div>
 
     </div>
