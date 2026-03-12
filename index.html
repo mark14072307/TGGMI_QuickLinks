@@ -89,7 +89,7 @@
       position: relative; z-index: 10;
       height: 100svh;
       display: flex; align-items: center; justify-content: center;
-      padding: clamp(10px, 2vw, 20px);
+      padding: clamp(8px, 1.5vw, 16px);
     }
 
     /* Container */
@@ -104,7 +104,7 @@
       box-shadow: 0 12px 60px rgba(0,0,0,0.75), 0 0 0 1px rgba(29,107,214,0.08);
       animation: fadeUp .8s cubic-bezier(.2,.65,.3,1) forwards;
       opacity: 0; transform: translateY(20px);
-      max-height: calc(100svh - 20px);
+      height: calc(100svh - 16px);
     }
     @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
 
@@ -121,32 +121,37 @@
     }
     @keyframes shimmer { 0%,100%{transform:translateX(-100%)} 60%{transform:translateX(100%)} }
 
-    /* Subtle redirect strip */
+    /* Redirect strip — more visible */
     .redirect-strip {
       flex-shrink: 0;
       display: flex; align-items: center; justify-content: space-between; gap: 8px;
-      padding: 5px 14px;
-      background: rgba(17,52,134,0.1);
-      border-bottom: 1px solid rgba(29,107,214,0.12);
+      padding: 8px 14px;
+      background: rgba(42,84,183,0.18);
+      border-bottom: 1px solid rgba(42,84,183,0.4);
       position: relative; overflow: hidden;
     }
     .redirect-strip-text {
-      font-size: 8px; letter-spacing: 1.5px; text-transform: uppercase;
-      color: var(--muted); font-weight: 600;
+      font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--silver); font-weight: 700;
+      display: flex; align-items: center; gap: 8px;
     }
-    .redirect-strip-text b { color: var(--spark); font-weight: 700; }
+    .redirect-strip-text b {
+      font-family: 'Anton', sans-serif;
+      font-size: 16px; letter-spacing: 1px;
+      color: var(--spark); line-height: 1;
+    }
     .redirect-strip-cancel {
-      font-size: 7px; letter-spacing: 1px; text-transform: uppercase;
-      color: var(--muted); font-weight: 700; cursor: pointer;
-      background: none; padding: 2px 6px;
-      border: 1px solid rgba(42,84,183,0.2); border-radius: 2px;
-      transition: color .2s, border-color .2s; flex-shrink: 0;
+      font-size: 8px; letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--silver); font-weight: 700; cursor: pointer;
+      background: rgba(11,43,119,0.3); padding: 4px 10px;
+      border: 1px solid rgba(42,84,183,0.5); border-radius: 2px;
+      transition: color .2s, border-color .2s, background .2s; flex-shrink: 0;
     }
-    .redirect-strip-cancel:hover { color: var(--silver); border-color: var(--spark); }
+    .redirect-strip-cancel:hover { color: var(--white); border-color: var(--spark); background: rgba(42,84,183,0.3); }
     .redirect-bar {
-      position: absolute; bottom: 0; left: 0; height: 1px;
-      background: var(--spark); width: 100%;
-      transform-origin: left;
+      position: absolute; bottom: 0; left: 0; height: 2px;
+      background: linear-gradient(90deg, var(--blue2), var(--spark));
+      width: 100%; transform-origin: left;
       animation: drainBar 5s linear forwards;
     }
     @keyframes drainBar { from{transform:scaleX(1)} to{transform:scaleX(0)} }
@@ -211,10 +216,11 @@
     /* Links */
     .links {
       flex: 1;
-      padding: 0 10px clamp(10px,2vh,14px);
+      padding: 0 10px;
       display: flex; flex-direction: column;
-      gap: 5px;
+      gap: 0;
       overflow: hidden;
+      justify-content: space-evenly;
     }
 
     .link-card {
@@ -275,12 +281,12 @@
     .footer {
       flex-shrink: 0;
       border-top: 1px solid var(--border);
-      padding: clamp(6px,1vh,9px) 14px;
+      padding: clamp(5px,0.8vh,8px) 14px;
       display: flex; align-items: center; justify-content: space-between; gap: 8px;
-      flex-wrap: wrap;
+      flex-wrap: nowrap; overflow: hidden;
     }
-    .footer p { font-size: 8px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
-    .footer span { font-size: 8px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+    .footer p { font-size: 8px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .footer span { font-size: 8px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); white-space: nowrap; flex-shrink: 0; }
 
     /* Tablet / small desktop */
     @media (max-height: 780px) {
@@ -289,7 +295,6 @@
       .eyebrow { margin-bottom: 8px; font-size: 7px; }
       .company-name { font-size: 18px; }
       .sec-label { padding: 7px 14px 4px; }
-      .links { gap: 4px; padding-bottom: 10px; }
       .link-card { padding: 9px 12px; }
       .footer { padding: 6px 14px; }
     }
@@ -302,17 +307,17 @@
       .company-name { font-size: 16px; letter-spacing: 2px; }
       .company-sub { font-size: 7px; letter-spacing: 2px; }
       .sec-label { padding: 5px 14px 3px; font-size: 7px; }
-      .links { gap: 3px; padding: 0 8px 8px; }
+      .links { padding: 0 8px; }
       .link-card { padding: 8px 11px; gap: 10px; }
       .link-icon { width: 28px; height: 28px; }
       .link-icon svg { width: 22px; height: 22px; }
       .link-name { font-size: 12px; }
       .link-desc { font-size: 9px; }
-      .links-div { margin: 0; }
       .footer { padding: 5px 12px; }
+      .footer span { display: none; }
     }
 
-    /* Short mobile (< 640px height — e.g. iPhone SE, small Androids) */
+    /* Short mobile (< 640px height) */
     @media (max-height: 640px) {
       .eyebrow { display: none; }
       .header { padding: 8px 16px 6px; }
@@ -321,7 +326,7 @@
       .company-sub { display: none; }
       .redirect-strip { padding: 4px 12px; }
       .sec-label { padding: 4px 12px 2px; }
-      .links { gap: 3px; padding: 0 7px 7px; }
+      .links { padding: 0 7px; }
       .link-card { padding: 7px 10px; }
     }
 
@@ -331,7 +336,6 @@
       .footer { display: none; }
       .eyebrow { display: none; }
       .company-sub { display: none; }
-      .links { gap: 2px; }
       .link-card { padding: 6px 10px; }
     }
   </style>
@@ -514,6 +518,8 @@
         clearInterval(timer);
         if (bar) { bar.style.animation = 'none'; bar.style.transform = 'scaleX(0)'; }
         if (strip) {
+          strip.style.background = 'rgba(106,122,140,0.08)';
+          strip.style.borderBottomColor = 'rgba(29,107,214,0.15)';
           var t = strip.querySelector('.redirect-strip-text');
           var b = strip.querySelector('.redirect-strip-cancel');
           if (t) t.innerHTML = 'Redirect cancelled';
