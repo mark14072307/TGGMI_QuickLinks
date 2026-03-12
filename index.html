@@ -30,23 +30,35 @@
     /* ── Background ── */
     .bg {
       position: fixed; inset: 0; z-index: 0;
-      background:
-        radial-gradient(ellipse 80% 60% at 50% -10%, rgba(17,52,134,0.45) 0%, transparent 65%),
-        radial-gradient(ellipse 50% 40% at 50% 110%, rgba(11,43,119,0.3) 0%, transparent 60%),
-        #080a0e;
-      animation: breathe 8s ease-in-out infinite alternate;
-    }
-    @keyframes breathe {
-      from { opacity: .85; }
-      to   { opacity: 1; }
+      background: #080a0e;
     }
 
-    /* Noise grain */
+    /* Grid lines */
+    .bg::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(42,84,183,0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(42,84,183,0.07) 1px, transparent 1px);
+      background-size: 40px 40px;
+      mask-image: radial-gradient(ellipse 85% 85% at 50% 50%, black 40%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 85% 85% at 50% 50%, black 40%, transparent 100%);
+    }
+
+    /* Radial vignette + center glow */
     .bg::after {
       content: '';
       position: absolute; inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-      pointer-events: none;
+      background:
+        radial-gradient(ellipse 70% 55% at 50% 50%, rgba(17,52,134,0.22) 0%, transparent 70%),
+        radial-gradient(ellipse 100% 100% at 50% 50%, transparent 55%, rgba(4,5,8,0.95) 100%);
+    }
+
+    /* Noise grain overlay */
+    .grain {
+      position: fixed; inset: 0; z-index: 1; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: .55;
     }
 
     /* Top + bottom edge lines */
@@ -262,6 +274,7 @@
 <body>
 
   <div class="bg"></div>
+  <div class="grain"></div>
   <div class="edge-top"></div>
   <div class="edge-bottom"></div>
 
