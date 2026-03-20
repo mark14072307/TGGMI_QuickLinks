@@ -15,18 +15,22 @@
       --silver: #b8c8d8;
       --muted:  #4a5a6c;
       --border: rgba(42,84,183,0.2);
+      /* Dynamic unit — set by JS to window.innerHeight * 0.01, like dvh but reliable */
+      --vh: 1vh;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     html, body {
-      height: 100%; width: 100%;
+      width: 100%;
+      height: 100%;
       font-family: 'Titillium Web', sans-serif;
       background: var(--bg);
       color: var(--white);
       overflow: hidden;
     }
 
+    /* ── Background ── */
     .bg {
       position: fixed; inset: 0; z-index: 0;
       background: #080a0e;
@@ -48,44 +52,24 @@
         radial-gradient(ellipse 70% 55% at 50% 50%, rgba(17,52,134,0.22) 0%, transparent 70%),
         radial-gradient(ellipse 100% 100% at 50% 50%, transparent 55%, rgba(4,5,8,0.95) 100%);
     }
-
     .grain {
       position: fixed; inset: 0; z-index: 1; pointer-events: none;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
       opacity: .55;
     }
-
     .edge-top {
       position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 2;
       background: linear-gradient(90deg, transparent, var(--spark), transparent);
       opacity: .6;
     }
-    .edge-bottom {
-      position: fixed; bottom: 0; left: 0; right: 0; height: 2px; z-index: 2;
-      background: linear-gradient(90deg, transparent, var(--blue), transparent);
-      opacity: .4;
-    }
 
-    /* ── Layout ── */
-    .page {
-      position: relative; z-index: 10;
-      height: 100svh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 0 clamp(16px, 5vw, 40px);
-      padding-bottom: 56px;
-      overflow-y: auto;
-      gap: 0;
-    }
-
-    /* ── Redirect bar ── */
+    /* ── Redirect bar — fixed height 40px ── */
     .redirect-bar {
       position: fixed; bottom: 0; left: 0; right: 0; z-index: 20;
+      height: 40px;
       display: flex; align-items: center; justify-content: center;
       gap: 14px;
-      padding: 9px 20px;
+      padding: 0 20px;
       background: rgba(17,52,134,0.92);
       backdrop-filter: blur(12px);
       border-top: 1px solid rgba(42,84,183,0.5);
@@ -97,8 +81,8 @@
     }
     .redirect-num {
       font-family: 'Anton', sans-serif;
-      font-size: 20px; color: #fff; line-height: 1;
-      min-width: 16px; text-align: center;
+      font-size: 18px; color: #fff; line-height: 1;
+      min-width: 14px; text-align: center;
     }
     .redirect-cancel {
       font-family: 'Titillium Web', sans-serif;
@@ -117,33 +101,53 @@
     }
     @keyframes drain { from{transform:scaleX(1)} to{transform:scaleX(0)} }
 
+    /* ── MAIN PAGE ── 
+       Uses calc(100% - 40px) to always leave space for the redirect bar.
+       Everything inside is distributed with flex so nothing overflows.
+    ── */
+    .page {
+      position: relative; z-index: 10;
+      height: calc(100% - 40px); /* full viewport minus redirect bar */
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0 clamp(16px, 5vw, 40px);
+      overflow: hidden; /* NO scroll ever */
+    }
+
     /* ── Logo block ── */
     .logo-block {
       display: flex; flex-direction: column; align-items: center;
-      margin-bottom: clamp(14px, 3vh, 26px);
+      flex-shrink: 0;
       animation: riseIn .9s cubic-bezier(.2,.65,.3,1) both;
     }
-    @keyframes riseIn { from{opacity:0; transform:translateY(16px)} to{opacity:1; transform:translateY(0)} }
+    @keyframes riseIn { from{opacity:0; transform:translateY(12px)} to{opacity:1; transform:translateY(0)} }
 
+    /*
+      Logo image: fluid between 44px and 72px, driven by viewport height.
+      4.5vh feels natural — small on short phones, bigger on tall screens.
+    */
     .logo-img {
-      width: clamp(60px, 13vw, 86px);
-      height: clamp(60px, 13vw, 86px);
+      width:  clamp(44px, 7vh, 72px);
+      height: clamp(44px, 7vh, 72px);
       object-fit: contain;
-      filter: drop-shadow(0 0 24px rgba(42,84,183,0.55));
-      margin-bottom: clamp(10px, 1.8vh, 16px);
+      filter: drop-shadow(0 0 20px rgba(42,84,183,0.55));
+      margin-bottom: clamp(6px, 1.2vh, 14px);
       display: block;
     }
     .logo-fallback {
-      font-family: 'Anton', sans-serif; font-size: 36px;
+      font-family: 'Anton', sans-serif; font-size: clamp(24px, 4vh, 36px);
       background: linear-gradient(135deg, #5b8fff, #2a54b7);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      margin-bottom: clamp(10px, 1.8vh, 16px);
+      margin-bottom: clamp(6px, 1.2vh, 14px);
       display: none;
     }
 
     .company-title {
       font-family: 'Anton', sans-serif;
-      font-size: clamp(20px, 5.5vw, 36px);
+      font-size: clamp(18px, 4.5vw, 34px);
       letter-spacing: 3px; text-transform: uppercase;
       line-height: 1; text-align: center;
     }
@@ -152,33 +156,38 @@
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
     .company-sub {
-      margin-top: 5px;
-      font-size: clamp(8px, 1.6vw, 10px);
+      margin-top: 4px;
+      font-size: clamp(7px, 1.4vw, 9px);
       letter-spacing: 3px; text-transform: uppercase;
       color: var(--muted); font-weight: 600; text-align: center;
     }
 
+    /* Divider */
     .divider {
-      width: clamp(180px, 55vw, 280px);
+      width: clamp(160px, 50vw, 260px);
       height: 1px;
       background: linear-gradient(90deg, transparent, var(--border), transparent);
-      margin: clamp(10px, 2vh, 20px) auto;
+      margin: clamp(8px, 1.5vh, 18px) auto;
       flex-shrink: 0;
     }
 
-    /* ── Links ── */
+    /* ── Links container ──
+       Uses flex-shrink: 1 so it compresses when space is tight,
+       but gap/padding also clamp down so cards never clip.
+    ── */
     .links {
       width: 100%;
-      max-width: 340px;
+      max-width: 360px;
       display: flex; flex-direction: column;
-      gap: clamp(5px, 1.1vh, 9px);
+      gap: clamp(4px, 0.9vh, 8px);
+      flex-shrink: 1;
       animation: riseIn 1s .15s cubic-bezier(.2,.65,.3,1) both;
     }
 
     .link-card {
       display: flex; align-items: center;
-      gap: 14px;
-      padding: clamp(10px, 1.7vh, 13px) 18px;
+      gap: 12px;
+      padding: clamp(8px, 1.4vh, 12px) 16px;
       background: rgba(255,255,255,0.03);
       border: 1px solid var(--border);
       border-radius: 2px;
@@ -186,6 +195,7 @@
       color: var(--white);
       position: relative; overflow: hidden;
       transition: background .2s, border-color .2s, transform .18s;
+      flex-shrink: 0; /* cards don't squish themselves — gaps compress instead */
     }
     .link-card::before {
       content: '';
@@ -208,60 +218,55 @@
     .link-card:hover::before { transform: scaleY(1); }
     .link-card:hover::after  { left: 140%; }
 
-    .link-icon { width: 26px; height: 26px; flex-shrink: 0; display: grid; place-items: center; }
-    .link-icon svg { width: 24px; height: 24px; display: block; transition: transform .2s; }
+    .link-icon {
+      width: 22px; height: 22px; flex-shrink: 0;
+      display: grid; place-items: center;
+    }
+    .link-icon svg {
+      width: 22px; height: 22px; display: block;
+      transition: transform .2s;
+    }
     .link-card:hover .link-icon svg { transform: scale(1.12); }
 
-    .link-text { flex: 1; display: flex; flex-direction: column; gap: 1px; }
+    .link-text { flex: 1; display: flex; flex-direction: column; gap: 1px; min-width: 0; }
     .link-name {
-      font-family: 'Titillium Web', sans-serif;
-      font-size: clamp(11px, 2.5vw, 13px);
+      font-size: clamp(10px, 2.2vw, 13px);
       font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
-      color: var(--white);
+      color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
     .link-meta {
-      font-size: clamp(9px, 1.7vw, 10px);
-      letter-spacing: .5px; color: var(--muted);
+      font-size: clamp(8px, 1.5vw, 10px);
+      letter-spacing: .4px; color: var(--muted);
       font-weight: 400; text-transform: lowercase;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
 
     .link-arrow {
-      font-size: 13px; color: var(--muted);
+      font-size: 12px; color: var(--muted);
       transition: color .2s, transform .2s; flex-shrink: 0;
     }
     .link-card:hover .link-arrow { color: var(--spark); transform: translateX(3px); }
 
     /* ── Footer ── */
     .footer-text {
-      margin-top: clamp(10px, 2vh, 18px);
-      font-size: 8px; letter-spacing: 2px; text-transform: uppercase;
-      color: var(--muted); text-align: center;
+      margin-top: clamp(6px, 1.2vh, 14px);
+      font-size: 7px; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--muted); text-align: center; flex-shrink: 0;
       animation: riseIn 1s .25s cubic-bezier(.2,.65,.3,1) both;
     }
 
-    /* ── Responsive ── */
-    @media (max-height: 780px) {
-      .links { gap: 5px; }
-      .link-card { padding: 9px 16px; }
-    }
-    @media (max-height: 680px) {
-      .logo-img { width: 54px; height: 54px; margin-bottom: 8px; }
-      .logo-block { margin-bottom: 10px; }
-      .divider { margin: 8px auto; }
-      .links { gap: 4px; }
-      .link-card { padding: 8px 14px; }
-      .footer-text { margin-top: 8px; }
-    }
+    /* ── Very short screens: progressively hide decoration ── */
     @media (max-height: 600px) {
-      .logo-img { width: 44px; height: 44px; }
-      .company-sub { display: none; }
-      .divider { margin: 6px auto; }
-      .footer-text { display: none; }
-      .link-meta { display: none; }
+      .company-sub   { display: none; }
+      .divider       { margin: 6px auto; }
+      .footer-text   { display: none; }
     }
-    @media (max-height: 530px) {
-      .redirect-bar { display: none; }
-      .divider { display: none; }
+    @media (max-height: 520px) {
+      .logo-img      { width: 36px; height: 36px; margin-bottom: 4px; }
+      .logo-block    { margin-bottom: 0; }
+      .redirect-bar  { display: none; }
+      .page          { height: 100%; }
+      .link-meta     { display: none; }
     }
 
   </style>
@@ -271,7 +276,6 @@
   <div class="bg"></div>
   <div class="grain"></div>
   <div class="edge-top"></div>
-  <div class="edge-bottom"></div>
 
   <!-- Redirect bar -->
   <div class="redirect-bar" id="redirectBar">
@@ -296,9 +300,9 @@
 
     <div class="divider"></div>
 
+    <!-- Links -->
     <div class="links">
 
-      <!-- Website -->
       <a href="https://www.tgmetalcraft.com" target="_blank" class="link-card">
         <div class="link-icon">
           <svg viewBox="0 0 48 48" fill="none">
@@ -316,7 +320,6 @@
         <span class="link-arrow">→</span>
       </a>
 
-      <!-- WhatsApp -->
       <a href="https://wa.me/+918077887830" target="_blank" class="link-card">
         <div class="link-icon">
           <svg viewBox="0 0 48 48" fill="none">
@@ -331,7 +334,6 @@
         <span class="link-arrow">→</span>
       </a>
 
-      <!-- Sales Email -->
       <a href="mailto:sales@tgmetalcraft.com" class="link-card">
         <div class="link-icon">
           <svg viewBox="0 0 48 48" fill="none">
@@ -346,7 +348,6 @@
         <span class="link-arrow">→</span>
       </a>
 
-      <!-- Info Email -->
       <a href="mailto:info@tgmetalcraft.com" class="link-card">
         <div class="link-icon">
           <svg viewBox="0 0 48 48" fill="none">
@@ -361,7 +362,6 @@
         <span class="link-arrow">→</span>
       </a>
 
-      <!-- Instagram -->
       <a href="https://www.instagram.com/tg_germanmetalcraft/profilecard/?igsh=MWMwcTJlYng1ZG9kMQ==" target="_blank" class="link-card">
         <div class="link-icon">
           <svg viewBox="0 0 48 48" fill="none">
@@ -389,7 +389,6 @@
         <span class="link-arrow">→</span>
       </a>
 
-      <!-- Facebook -->
       <a href="https://www.facebook.com/share/16itsnsCTs/" target="_blank" class="link-card">
         <div class="link-icon">
           <svg viewBox="0 0 48 48" fill="none">
@@ -403,7 +402,6 @@
         <span class="link-arrow">→</span>
       </a>
 
-      <!-- Location -->
       <a href="https://maps.app.goo.gl/5fDtDsxV2wagqL956" target="_blank" class="link-card">
         <div class="link-icon">
           <svg viewBox="0 0 48 48" fill="none">
@@ -418,7 +416,6 @@
         <span class="link-arrow">→</span>
       </a>
 
-      <!-- Google Page -->
       <a href="https://share.google/qTNzDhfnwqQyn6JeO" target="_blank" class="link-card">
         <div class="link-icon">
           <svg viewBox="0 0 48 48" fill="none">
@@ -442,8 +439,15 @@
   </div>
 
   <script>
+    /* Fix --vh so height calc is based on actual visible area (avoids mobile browser chrome issues) */
+    function setVh() {
+      document.documentElement.style.setProperty('--vh', window.innerHeight * 0.01 + 'px');
+    }
+    setVh();
+    window.addEventListener('resize', setVh);
+
+    /* Redirect */
     (function () {
-      /* ✅ Corrected redirect URL */
       var WEBSITE = 'https://www.tgmetalcraft.com';
       var secs = 5;
       var cancelled = false;
