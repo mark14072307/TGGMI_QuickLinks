@@ -4,36 +4,39 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>TG German Metalcraft Industries Pvt Ltd</title>
+  <link rel="icon" type="image/png" href="images/logo.png">
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Titillium+Web:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
 
     :root {
       --bg:     #080a0e;
-      --blue:   #0b2b77;
       --spark:  #2a54b7;
       --white:  #f0f4fa;
       --silver: #b8c8d8;
       --muted:  #4a5a6c;
       --border: rgba(42,84,183,0.2);
-      /* Dynamic unit — set by JS to window.innerHeight * 0.01, like dvh but reliable */
-      --vh: 1vh;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    html, body {
-      width: 100%;
+    /* Lock everything to exact viewport — no scroll possible */
+    html {
       height: 100%;
+      overflow: hidden;
+    }
+    body {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
       font-family: 'Titillium Web', sans-serif;
       background: var(--bg);
       color: var(--white);
-      overflow: hidden;
     }
 
-    /* ── Background ── */
+    /* ── Background decorations (purely visual, don't affect layout) ── */
     .bg {
-      position: fixed; inset: 0; z-index: 0;
-      background: #080a0e;
+      position: fixed; inset: 0; z-index: 0; background: #080a0e;
+      pointer-events: none;
     }
     .bg::before {
       content: '';
@@ -55,24 +58,54 @@
     .grain {
       position: fixed; inset: 0; z-index: 1; pointer-events: none;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-      opacity: .55;
+      opacity: .5;
     }
     .edge-top {
       position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 2;
       background: linear-gradient(90deg, transparent, var(--spark), transparent);
-      opacity: .6;
+      opacity: .6; pointer-events: none;
     }
 
-    /* ── Redirect bar — fixed height 40px ── */
+    /*
+    ═══════════════════════════════════════════════
+    CORE LAYOUT STRATEGY
+    ───────────────────────────────────────────────
+    .shell = full viewport, flex column
+      ├── .content  (flex: 1, centers everything, clips overflow)
+      │     ├── .logo-block
+      │     ├── .divider
+      │     └── .links  (8 cards)
+      └── .redirect-bar (fixed height, never shrinks)
+
+    The trick: .content uses height:0 + flex:1 so it
+    takes exactly whatever space is left after the bar.
+    Cards use vh-based padding so they auto-compress.
+    ═══════════════════════════════════════════════
+    */
+
+    .shell {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      height: 100vh;
+      height: 100dvh; /* dynamic viewport height — accounts for mobile browser bars */
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Redirect bar — always at bottom, fixed height */
     .redirect-bar {
-      position: fixed; bottom: 0; left: 0; right: 0; z-index: 20;
-      height: 40px;
+      flex-shrink: 0;
+      height: 42px;
       display: flex; align-items: center; justify-content: center;
       gap: 14px;
       padding: 0 20px;
-      background: rgba(17,52,134,0.92);
+      background: rgba(11,43,119,0.95);
       backdrop-filter: blur(12px);
       border-top: 1px solid rgba(42,84,183,0.5);
+      position: relative;
+      z-index: 20;
     }
     .redirect-text {
       font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
@@ -85,10 +118,9 @@
       min-width: 14px; text-align: center;
     }
     .redirect-cancel {
-      font-family: 'Titillium Web', sans-serif;
       font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
-      color: rgba(184,200,216,0.6); font-weight: 700;
-      background: none; border: 1px solid rgba(42,84,183,0.35);
+      color: rgba(184,200,216,0.65); font-weight: 700;
+      background: none; border: 1px solid rgba(42,84,183,0.4);
       padding: 3px 10px; border-radius: 2px; cursor: pointer;
       transition: color .2s, border-color .2s;
     }
@@ -101,53 +133,45 @@
     }
     @keyframes drain { from{transform:scaleX(1)} to{transform:scaleX(0)} }
 
-    /* ── MAIN PAGE ── 
-       Uses calc(100% - 40px) to always leave space for the redirect bar.
-       Everything inside is distributed with flex so nothing overflows.
-    ── */
-    .page {
-      position: relative; z-index: 10;
-      height: calc(100% - 40px); /* full viewport minus redirect bar */
-      width: 100%;
+    /* Content area — takes all remaining height, centers children */
+    .content {
+      flex: 1;
+      min-height: 0; /* critical: lets flex child shrink below content size */
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 0 clamp(16px, 5vw, 40px);
-      overflow: hidden; /* NO scroll ever */
+      padding: 0 clamp(14px, 4vw, 36px);
+      overflow: hidden;
     }
 
-    /* ── Logo block ── */
+    /* ── Logo ── */
     .logo-block {
-      display: flex; flex-direction: column; align-items: center;
       flex-shrink: 0;
-      animation: riseIn .9s cubic-bezier(.2,.65,.3,1) both;
+      display: flex; flex-direction: column; align-items: center;
+      animation: up .8s cubic-bezier(.2,.65,.3,1) both;
     }
-    @keyframes riseIn { from{opacity:0; transform:translateY(12px)} to{opacity:1; transform:translateY(0)} }
+    @keyframes up { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
 
-    /*
-      Logo image: fluid between 44px and 72px, driven by viewport height.
-      4.5vh feels natural — small on short phones, bigger on tall screens.
-    */
     .logo-img {
-      width:  clamp(44px, 7vh, 72px);
-      height: clamp(44px, 7vh, 72px);
+      /* Scales with viewport height. On a 700px screen = ~52px. On 900px = ~67px */
+      width:  clamp(42px, 7.5vh, 68px);
+      height: clamp(42px, 7.5vh, 68px);
       object-fit: contain;
-      filter: drop-shadow(0 0 20px rgba(42,84,183,0.55));
-      margin-bottom: clamp(6px, 1.2vh, 14px);
-      display: block;
+      filter: drop-shadow(0 0 18px rgba(42,84,183,0.6));
+      margin-bottom: clamp(5px, 1vh, 12px);
     }
     .logo-fallback {
-      font-family: 'Anton', sans-serif; font-size: clamp(24px, 4vh, 36px);
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(22px, 4vh, 34px);
       background: linear-gradient(135deg, #5b8fff, #2a54b7);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      margin-bottom: clamp(6px, 1.2vh, 14px);
+      margin-bottom: clamp(5px, 1vh, 12px);
       display: none;
     }
-
     .company-title {
       font-family: 'Anton', sans-serif;
-      font-size: clamp(18px, 4.5vw, 34px);
+      font-size: clamp(17px, 4vw, 32px);
       letter-spacing: 3px; text-transform: uppercase;
       line-height: 1; text-align: center;
     }
@@ -156,151 +180,149 @@
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
     .company-sub {
-      margin-top: 4px;
-      font-size: clamp(7px, 1.4vw, 9px);
+      margin-top: 3px;
+      font-size: clamp(6px, 1.2vw, 9px);
       letter-spacing: 3px; text-transform: uppercase;
       color: var(--muted); font-weight: 600; text-align: center;
     }
 
-    /* Divider */
     .divider {
-      width: clamp(160px, 50vw, 260px);
+      flex-shrink: 0;
+      width: clamp(140px, 45vw, 240px);
       height: 1px;
       background: linear-gradient(90deg, transparent, var(--border), transparent);
-      margin: clamp(8px, 1.5vh, 18px) auto;
-      flex-shrink: 0;
+      margin: clamp(6px, 1.2vh, 16px) 0;
     }
 
-    /* ── Links container ──
-       Uses flex-shrink: 1 so it compresses when space is tight,
-       but gap/padding also clamp down so cards never clip.
-    ── */
+    /* ── Links ── */
     .links {
+      flex-shrink: 1;
+      min-height: 0;
       width: 100%;
       max-width: 360px;
-      display: flex; flex-direction: column;
-      gap: clamp(4px, 0.9vh, 8px);
-      flex-shrink: 1;
-      animation: riseIn 1s .15s cubic-bezier(.2,.65,.3,1) both;
+      display: flex;
+      flex-direction: column;
+      /* gap shrinks proportionally on shorter screens */
+      gap: clamp(3px, 0.7vh, 7px);
+      animation: up .9s .1s cubic-bezier(.2,.65,.3,1) both;
     }
 
     .link-card {
+      /* flex-shrink:0 keeps cards from getting squashed — gaps absorb the pressure instead */
+      flex-shrink: 0;
       display: flex; align-items: center;
-      gap: 12px;
-      padding: clamp(8px, 1.4vh, 12px) 16px;
+      gap: 11px;
+      /* padding shrinks on small screens */
+      padding: clamp(7px, 1.2vh, 11px) 14px;
       background: rgba(255,255,255,0.03);
       border: 1px solid var(--border);
       border-radius: 2px;
       text-decoration: none;
       color: var(--white);
       position: relative; overflow: hidden;
-      transition: background .2s, border-color .2s, transform .18s;
-      flex-shrink: 0; /* cards don't squish themselves — gaps compress instead */
+      transition: background .2s, border-color .2s, transform .15s;
     }
     .link-card::before {
       content: '';
       position: absolute; left: 0; top: 0; bottom: 0; width: 2px;
       background: linear-gradient(to bottom, var(--spark), #5b8fff);
       transform: scaleY(0); transform-origin: center;
-      transition: transform .25s cubic-bezier(.4,0,.2,1);
+      transition: transform .22s cubic-bezier(.4,0,.2,1);
     }
     .link-card::after {
       content: '';
-      position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,.05), transparent);
-      transition: left .5s ease;
+      position: absolute; top: 0; left: -100%; width: 55%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.04), transparent);
+      transition: left .45s ease;
     }
     .link-card:hover {
       background: rgba(42,84,183,0.1);
       border-color: rgba(42,84,183,0.5);
-      transform: translateX(4px);
+      transform: translateX(3px);
     }
     .link-card:hover::before { transform: scaleY(1); }
     .link-card:hover::after  { left: 140%; }
 
     .link-icon {
-      width: 22px; height: 22px; flex-shrink: 0;
+      flex-shrink: 0;
+      width: 20px; height: 20px;
       display: grid; place-items: center;
     }
     .link-icon svg {
-      width: 22px; height: 22px; display: block;
-      transition: transform .2s;
+      width: 20px; height: 20px;
+      transition: transform .18s;
     }
-    .link-card:hover .link-icon svg { transform: scale(1.12); }
+    .link-card:hover .link-icon svg { transform: scale(1.1); }
 
-    .link-text { flex: 1; display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+    .link-text {
+      flex: 1; min-width: 0;
+      display: flex; flex-direction: column; gap: 1px;
+    }
     .link-name {
-      font-size: clamp(10px, 2.2vw, 13px);
-      font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
-      color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      font-size: clamp(10px, 2vw, 12px);
+      font-weight: 700; letter-spacing: 1.8px; text-transform: uppercase;
+      color: var(--white);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
     .link-meta {
-      font-size: clamp(8px, 1.5vw, 10px);
-      letter-spacing: .4px; color: var(--muted);
-      font-weight: 400; text-transform: lowercase;
+      font-size: clamp(8px, 1.4vw, 10px);
+      letter-spacing: .3px; color: var(--muted); font-weight: 400;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
 
     .link-arrow {
-      font-size: 12px; color: var(--muted);
-      transition: color .2s, transform .2s; flex-shrink: 0;
+      flex-shrink: 0;
+      font-size: 11px; color: var(--muted);
+      transition: color .18s, transform .18s;
     }
     .link-card:hover .link-arrow { color: var(--spark); transform: translateX(3px); }
 
-    /* ── Footer ── */
+    /* Footer */
     .footer-text {
-      margin-top: clamp(6px, 1.2vh, 14px);
+      flex-shrink: 0;
+      margin-top: clamp(5px, 1vh, 12px);
       font-size: 7px; letter-spacing: 2px; text-transform: uppercase;
-      color: var(--muted); text-align: center; flex-shrink: 0;
-      animation: riseIn 1s .25s cubic-bezier(.2,.65,.3,1) both;
+      color: var(--muted); text-align: center;
+      animation: up .9s .2s cubic-bezier(.2,.65,.3,1) both;
     }
 
-    /* ── Very short screens: progressively hide decoration ── */
-    @media (max-height: 600px) {
-      .company-sub   { display: none; }
-      .divider       { margin: 6px auto; }
-      .footer-text   { display: none; }
+    /* Hide progressively on very short screens to reclaim space */
+    @media (max-height: 640px) {
+      .company-sub { display: none; }
+      .footer-text { display: none; }
     }
-    @media (max-height: 520px) {
-      .logo-img      { width: 36px; height: 36px; margin-bottom: 4px; }
-      .logo-block    { margin-bottom: 0; }
-      .redirect-bar  { display: none; }
-      .page          { height: 100%; }
-      .link-meta     { display: none; }
+    @media (max-height: 560px) {
+      .link-meta { display: none; }
+      .divider   { margin: 4px 0; }
+    }
+    @media (max-height: 480px) {
+      .redirect-bar { display: none; }
+      .logo-img { width: 34px; height: 34px; }
     }
 
   </style>
 </head>
 <body>
 
-  <div class="bg"></div>
-  <div class="grain"></div>
-  <div class="edge-top"></div>
+<div class="bg"></div>
+<div class="grain"></div>
+<div class="edge-top"></div>
 
-  <!-- Redirect bar -->
-  <div class="redirect-bar" id="redirectBar">
-    <div class="redirect-text">
-      Redirecting to website in
-      <span class="redirect-num" id="countdown">5</span>
-    </div>
-    <button class="redirect-cancel" onclick="cancelRedirect()">Cancel</button>
-    <div class="redirect-progress" id="redirectProgress"></div>
-  </div>
+<div class="shell">
 
-  <div class="page">
+  <!-- Main content -->
+  <div class="content">
 
-    <!-- Logo -->
     <div class="logo-block">
       <img class="logo-img" src="images/logo.png" alt="TG German Metalcraft"
-        onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='block';">
-      <span class="logo-fallback" id="logoFallback">TG</span>
+           onerror="this.style.display='none';document.getElementById('lf').style.display='block'">
+      <span class="logo-fallback" id="lf">TG</span>
       <div class="company-title"><span class="tg">TG</span> German Metalcraft</div>
-      <div class="company-sub">Industries Pvt Ltd · Precision Metal Fabrication</div>
+      <div class="company-sub">Industries Pvt Ltd &middot; Precision Metal Fabrication</div>
     </div>
 
     <div class="divider"></div>
 
-    <!-- Links -->
     <div class="links">
 
       <a href="https://www.tgmetalcraft.com" target="_blank" class="link-card">
@@ -317,10 +339,10 @@
           <span class="link-name">Website</span>
           <span class="link-meta">www.tgmetalcraft.com</span>
         </div>
-        <span class="link-arrow">→</span>
+        <span class="link-arrow">&#8594;</span>
       </a>
 
-      <a href="https://wa.me/+918077887830" target="_blank" class="link-card">
+      <a href="https://wa.me/918077887830" target="_blank" class="link-card">
         <div class="link-icon">
           <svg viewBox="0 0 48 48" fill="none">
             <path d="M24 4C13 4 4 13 4 24c0 3.6.97 7 2.65 9.9L4 44l10.4-2.7A19.94 19.94 0 0024 44c11 0 20-9 20-20S35 4 24 4z" fill="#25D366"/>
@@ -331,10 +353,13 @@
           <span class="link-name">WhatsApp</span>
           <span class="link-meta">+91 80778 87830</span>
         </div>
-        <span class="link-arrow">→</span>
+        <span class="link-arrow">&#8594;</span>
       </a>
 
-      <a href="mailto:sales@tgmetalcraft.com" class="link-card">
+      <!-- NOTE: Cloudflare email obfuscation may rewrite mailto: links on your hosting.
+           If emails show as "[email protected]", disable Cloudflare's Email Address Obfuscation
+           in your Cloudflare dashboard → Scrape Shield → Email Address Obfuscation → OFF -->
+      <a href="mailto:sales&#64;tgmetalcraft.com" class="link-card">
         <div class="link-icon">
           <svg viewBox="0 0 48 48" fill="none">
             <rect x="4" y="10" width="40" height="28" rx="3" stroke="#2a54b7" stroke-width="2.2" fill="none"/>
@@ -343,12 +368,12 @@
         </div>
         <div class="link-text">
           <span class="link-name">Sales Enquiry</span>
-          <span class="link-meta">sales@tgmetalcraft.com</span>
+          <span class="link-meta">sales&#64;tgmetalcraft.com</span>
         </div>
-        <span class="link-arrow">→</span>
+        <span class="link-arrow">&#8594;</span>
       </a>
 
-      <a href="mailto:info@tgmetalcraft.com" class="link-card">
+      <a href="mailto:info&#64;tgmetalcraft.com" class="link-card">
         <div class="link-icon">
           <svg viewBox="0 0 48 48" fill="none">
             <rect x="4" y="10" width="40" height="28" rx="3" stroke="#5b8fff" stroke-width="2.2" fill="none"/>
@@ -357,9 +382,9 @@
         </div>
         <div class="link-text">
           <span class="link-name">General Info</span>
-          <span class="link-meta">info@tgmetalcraft.com</span>
+          <span class="link-meta">info&#64;tgmetalcraft.com</span>
         </div>
-        <span class="link-arrow">→</span>
+        <span class="link-arrow">&#8594;</span>
       </a>
 
       <a href="https://www.instagram.com/tg_germanmetalcraft/profilecard/?igsh=MWMwcTJlYng1ZG9kMQ==" target="_blank" class="link-card">
@@ -384,9 +409,9 @@
         </div>
         <div class="link-text">
           <span class="link-name">Instagram</span>
-          <span class="link-meta">@tg_germanmetalcraft</span>
+          <span class="link-meta">&#64;tg_germanmetalcraft</span>
         </div>
-        <span class="link-arrow">→</span>
+        <span class="link-arrow">&#8594;</span>
       </a>
 
       <a href="https://www.facebook.com/share/16itsnsCTs/" target="_blank" class="link-card">
@@ -399,7 +424,7 @@
         <div class="link-text">
           <span class="link-name">Facebook</span>
         </div>
-        <span class="link-arrow">→</span>
+        <span class="link-arrow">&#8594;</span>
       </a>
 
       <a href="https://maps.app.goo.gl/5fDtDsxV2wagqL956" target="_blank" class="link-card">
@@ -413,7 +438,7 @@
           <span class="link-name">Our Location</span>
           <span class="link-meta">View on Google Maps</span>
         </div>
-        <span class="link-arrow">→</span>
+        <span class="link-arrow">&#8594;</span>
       </a>
 
       <a href="https://share.google/qTNzDhfnwqQyn6JeO" target="_blank" class="link-card">
@@ -429,56 +454,59 @@
           <span class="link-name">Google Page</span>
           <span class="link-meta">Reviews &amp; Business Profile</span>
         </div>
-        <span class="link-arrow">→</span>
+        <span class="link-arrow">&#8594;</span>
       </a>
 
     </div>
 
-    <div class="footer-text">© 2026 TG German Metalcraft Industries Pvt Ltd</div>
+    <div class="footer-text">&copy; 2026 TG German Metalcraft Industries Pvt Ltd</div>
 
+  </div><!-- /.content -->
+
+  <!-- Redirect bar — always last so it sits at bottom of flex column -->
+  <div class="redirect-bar" id="redirectBar">
+    <div class="redirect-text">
+      Redirecting to website in&nbsp;
+      <span class="redirect-num" id="countdown">5</span>
+    </div>
+    <button class="redirect-cancel" onclick="cancelRedirect()">Cancel</button>
+    <div class="redirect-progress" id="redirectProgress"></div>
   </div>
 
-  <script>
-    /* Fix --vh so height calc is based on actual visible area (avoids mobile browser chrome issues) */
-    function setVh() {
-      document.documentElement.style.setProperty('--vh', window.innerHeight * 0.01 + 'px');
+</div><!-- /.shell -->
+
+<script>
+(function () {
+  var WEBSITE = 'https://www.tgmetalcraft.com';
+  var secs = 5, cancelled = false;
+  var countEl = document.getElementById('countdown');
+  var barEl   = document.getElementById('redirectBar');
+  var progEl  = document.getElementById('redirectProgress');
+
+  var timer = setInterval(function () {
+    secs--;
+    if (countEl) countEl.textContent = secs;
+    if (secs <= 0) {
+      clearInterval(timer);
+      if (!cancelled) window.location.href = WEBSITE;
     }
-    setVh();
-    window.addEventListener('resize', setVh);
+  }, 1000);
 
-    /* Redirect */
-    (function () {
-      var WEBSITE = 'https://www.tgmetalcraft.com';
-      var secs = 5;
-      var cancelled = false;
-      var countEl = document.getElementById('countdown');
-      var barEl   = document.getElementById('redirectBar');
-      var progEl  = document.getElementById('redirectProgress');
-
-      var timer = setInterval(function () {
-        secs--;
-        if (countEl) countEl.textContent = secs;
-        if (secs <= 0) {
-          clearInterval(timer);
-          if (!cancelled) window.location.href = WEBSITE;
-        }
-      }, 1000);
-
-      window.cancelRedirect = function () {
-        cancelled = true;
-        clearInterval(timer);
-        if (progEl) { progEl.style.animation = 'none'; progEl.style.transform = 'scaleX(0)'; }
-        if (barEl) {
-          barEl.style.background = 'rgba(10,12,16,0.92)';
-          barEl.style.borderTopColor = 'rgba(42,84,183,0.15)';
-          var t = barEl.querySelector('.redirect-text');
-          var b = barEl.querySelector('.redirect-cancel');
-          if (t) t.innerHTML = '<span style="letter-spacing:2px;color:#4a5a6c">REDIRECT CANCELLED</span>';
-          if (b) b.style.display = 'none';
-        }
-      };
-    })();
-  </script>
+  window.cancelRedirect = function () {
+    cancelled = true;
+    clearInterval(timer);
+    if (progEl) { progEl.style.animation = 'none'; progEl.style.transform = 'scaleX(0)'; }
+    if (barEl) {
+      barEl.style.background = 'rgba(10,12,16,0.95)';
+      barEl.style.borderTopColor = 'rgba(42,84,183,0.15)';
+      var t = barEl.querySelector('.redirect-text');
+      var b = barEl.querySelector('.redirect-cancel');
+      if (t) t.innerHTML = '<span style="letter-spacing:2px;color:#4a5a6c">REDIRECT CANCELLED</span>';
+      if (b) b.style.display = 'none';
+    }
+  };
+})();
+</script>
 
 </body>
 </html>
