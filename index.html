@@ -4,7 +4,8 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>TG German Metalcraft Industries Pvt Ltd</title>
-  <link rel="icon" type="image/png" href="images/logo.png">
+  <link rel="icon" type="image/png" href="images/logo.png" sizes="192x192">
+  <link rel="apple-touch-icon" sizes="180x180" href="images/logo.png">
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Titillium+Web:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
 
@@ -64,6 +65,21 @@
       position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 2;
       background: linear-gradient(90deg, transparent, var(--spark), transparent);
       opacity: .6; pointer-events: none;
+    }
+
+    /* ── Watermark ── */
+    .watermark {
+      position: fixed; inset: 0; z-index: 3;
+      pointer-events: none;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .watermark img {
+      width: min(55vw, 55vh);
+      height: min(55vw, 55vh);
+      object-fit: contain;
+      opacity: 0.045;
+      filter: grayscale(1) brightness(4);
+      user-select: none;
     }
 
     /*
@@ -286,6 +302,25 @@
       animation: up .9s .2s cubic-bezier(.2,.65,.3,1) both;
     }
 
+    /* ── Watermark logo ── */
+    .watermark {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .watermark img {
+      width: min(72vw, 72vh);
+      height: min(72vw, 72vh);
+      object-fit: contain;
+      opacity: 0.06;
+      filter: blur(0.5px) grayscale(10%) brightness(1.4);
+      user-select: none;
+    }
+
     /* Hide progressively on very short screens to reclaim space */
     @media (max-height: 640px) {
       .company-sub { display: none; }
@@ -307,6 +342,7 @@
 <div class="bg"></div>
 <div class="grain"></div>
 <div class="edge-top"></div>
+<div class="watermark"><img src="images/logo.png" alt=""></div>
 
 <div class="shell">
 
@@ -359,7 +395,7 @@
       <!-- NOTE: Cloudflare email obfuscation may rewrite mailto: links on your hosting.
            If emails show as "[email protected]", disable Cloudflare's Email Address Obfuscation
            in your Cloudflare dashboard → Scrape Shield → Email Address Obfuscation → OFF -->
-      <a href="mailto:sales&#64;tgmetalcraft.com" class="link-card">
+      <a href="/cdn-cgi/l/email-protection#0271636e6771242134363976656f6776636e61706364762c616d6f" class="link-card">
         <div class="link-icon">
           <svg viewBox="0 0 48 48" fill="none">
             <rect x="4" y="10" width="40" height="28" rx="3" stroke="#2a54b7" stroke-width="2.2" fill="none"/>
@@ -373,7 +409,7 @@
         <span class="link-arrow">&#8594;</span>
       </a>
 
-      <a href="mailto:info&#64;tgmetalcraft.com" class="link-card">
+      <a href="/cdn-cgi/l/email-protection#9bf2f5fdf4bdb8adafa0effcf6feeffaf7f8e9fafdefb5f8f4f6" class="link-card">
         <div class="link-icon">
           <svg viewBox="0 0 48 48" fill="none">
             <rect x="4" y="10" width="40" height="28" rx="3" stroke="#5b8fff" stroke-width="2.2" fill="none"/>
@@ -475,7 +511,7 @@
 
 </div><!-- /.shell -->
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 (function () {
   var WEBSITE = 'https://www.tgmetalcraft.com';
   var secs = 5, cancelled = false;
@@ -492,7 +528,7 @@
     }
   }, 1000);
 
-  window.cancelRedirect = function () {
+ window.cancelRedirect = function () {
     cancelled = true;
     clearInterval(timer);
     if (progEl) { progEl.style.animation = 'none'; progEl.style.transform = 'scaleX(0)'; }
