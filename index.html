@@ -27,13 +27,10 @@
       overflow: hidden;
     }
 
-    /* ── Background ── */
     .bg {
       position: fixed; inset: 0; z-index: 0;
       background: #080a0e;
     }
-
-    /* Grid lines */
     .bg::before {
       content: '';
       position: absolute; inset: 0;
@@ -44,8 +41,6 @@
       mask-image: radial-gradient(ellipse 85% 85% at 50% 50%, black 40%, transparent 100%);
       -webkit-mask-image: radial-gradient(ellipse 85% 85% at 50% 50%, black 40%, transparent 100%);
     }
-
-    /* Radial vignette + center glow */
     .bg::after {
       content: '';
       position: absolute; inset: 0;
@@ -54,14 +49,12 @@
         radial-gradient(ellipse 100% 100% at 50% 50%, transparent 55%, rgba(4,5,8,0.95) 100%);
     }
 
-    /* Noise grain overlay */
     .grain {
       position: fixed; inset: 0; z-index: 1; pointer-events: none;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
       opacity: .55;
     }
 
-    /* Top + bottom edge lines */
     .edge-top {
       position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 2;
       background: linear-gradient(90deg, transparent, var(--spark), transparent);
@@ -82,10 +75,12 @@
       align-items: center;
       justify-content: center;
       padding: 0 clamp(16px, 5vw, 40px);
+      padding-bottom: 56px;
+      overflow-y: auto;
       gap: 0;
     }
 
-    /* ── Redirect bar — bottom of page ── */
+    /* ── Redirect bar ── */
     .redirect-bar {
       position: fixed; bottom: 0; left: 0; right: 0; z-index: 20;
       display: flex; align-items: center; justify-content: center;
@@ -125,30 +120,30 @@
     /* ── Logo block ── */
     .logo-block {
       display: flex; flex-direction: column; align-items: center;
-      margin-bottom: clamp(20px, 4vh, 36px);
+      margin-bottom: clamp(14px, 3vh, 26px);
       animation: riseIn .9s cubic-bezier(.2,.65,.3,1) both;
     }
     @keyframes riseIn { from{opacity:0; transform:translateY(16px)} to{opacity:1; transform:translateY(0)} }
 
     .logo-img {
-      width: clamp(72px, 16vw, 100px);
-      height: clamp(72px, 16vw, 100px);
+      width: clamp(60px, 13vw, 86px);
+      height: clamp(60px, 13vw, 86px);
       object-fit: contain;
       filter: drop-shadow(0 0 24px rgba(42,84,183,0.55));
-      margin-bottom: clamp(12px, 2.5vh, 20px);
+      margin-bottom: clamp(10px, 1.8vh, 16px);
       display: block;
     }
     .logo-fallback {
       font-family: 'Anton', sans-serif; font-size: 36px;
       background: linear-gradient(135deg, #5b8fff, #2a54b7);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      margin-bottom: clamp(12px, 2.5vh, 20px);
+      margin-bottom: clamp(10px, 1.8vh, 16px);
       display: none;
     }
 
     .company-title {
       font-family: 'Anton', sans-serif;
-      font-size: clamp(22px, 6vw, 38px);
+      font-size: clamp(20px, 5.5vw, 36px);
       letter-spacing: 3px; text-transform: uppercase;
       line-height: 1; text-align: center;
     }
@@ -158,17 +153,16 @@
     }
     .company-sub {
       margin-top: 5px;
-      font-size: clamp(8px, 1.8vw, 10px);
+      font-size: clamp(8px, 1.6vw, 10px);
       letter-spacing: 3px; text-transform: uppercase;
       color: var(--muted); font-weight: 600; text-align: center;
     }
 
-    /* Divider line */
     .divider {
       width: clamp(180px, 55vw, 280px);
       height: 1px;
       background: linear-gradient(90deg, transparent, var(--border), transparent);
-      margin: clamp(16px, 3vh, 28px) auto;
+      margin: clamp(10px, 2vh, 20px) auto;
       flex-shrink: 0;
     }
 
@@ -177,14 +171,14 @@
       width: 100%;
       max-width: 340px;
       display: flex; flex-direction: column;
-      gap: clamp(7px, 1.4vh, 11px);
+      gap: clamp(5px, 1.1vh, 9px);
       animation: riseIn 1s .15s cubic-bezier(.2,.65,.3,1) both;
     }
 
     .link-card {
       display: flex; align-items: center;
       gap: 14px;
-      padding: clamp(11px, 2vh, 15px) 18px;
+      padding: clamp(10px, 1.7vh, 13px) 18px;
       background: rgba(255,255,255,0.03);
       border: 1px solid var(--border);
       border-radius: 2px;
@@ -193,7 +187,6 @@
       position: relative; overflow: hidden;
       transition: background .2s, border-color .2s, transform .18s;
     }
-    /* Left glow on hover */
     .link-card::before {
       content: '';
       position: absolute; left: 0; top: 0; bottom: 0; width: 2px;
@@ -201,7 +194,6 @@
       transform: scaleY(0); transform-origin: center;
       transition: transform .25s cubic-bezier(.4,0,.2,1);
     }
-    /* Shimmer */
     .link-card::after {
       content: '';
       position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
@@ -220,11 +212,17 @@
     .link-icon svg { width: 24px; height: 24px; display: block; transition: transform .2s; }
     .link-card:hover .link-icon svg { transform: scale(1.12); }
 
+    .link-text { flex: 1; display: flex; flex-direction: column; gap: 1px; }
     .link-name {
       font-family: 'Titillium Web', sans-serif;
-      font-size: clamp(12px, 2.8vw, 14px);
+      font-size: clamp(11px, 2.5vw, 13px);
       font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
-      color: var(--white); flex: 1;
+      color: var(--white);
+    }
+    .link-meta {
+      font-size: clamp(9px, 1.7vw, 10px);
+      letter-spacing: .5px; color: var(--muted);
+      font-weight: 400; text-transform: lowercase;
     }
 
     .link-arrow {
@@ -235,38 +233,35 @@
 
     /* ── Footer ── */
     .footer-text {
-      margin-top: clamp(16px, 3vh, 26px);
+      margin-top: clamp(10px, 2vh, 18px);
       font-size: 8px; letter-spacing: 2px; text-transform: uppercase;
       color: var(--muted); text-align: center;
       animation: riseIn 1s .25s cubic-bezier(.2,.65,.3,1) both;
     }
 
-    /* ── Height-based scaling for no-scroll ── */
-    @media (max-height: 750px) {
-      .logo-img, .logo-fallback { width: 64px; height: 64px; margin-bottom: 10px; }
-      .logo-block { margin-bottom: 16px; }
-      .divider { margin: 12px auto; }
-      .links { gap: 6px; }
-      .link-card { padding: 10px 16px; }
-      .footer-text { margin-top: 12px; }
-    }
-    @media (max-height: 660px) {
-      .logo-img, .logo-fallback { width: 52px; height: 52px; margin-bottom: 8px; }
-      .logo-block { margin-bottom: 12px; }
-      .company-title { font-size: 20px; }
-      .company-sub { display: none; }
-      .divider { margin: 10px auto; }
+    /* ── Responsive ── */
+    @media (max-height: 780px) {
       .links { gap: 5px; }
-      .link-card { padding: 9px 14px; }
-      .footer-text { display: none; }
+      .link-card { padding: 9px 16px; }
     }
-    @media (max-height: 560px) {
-      .redirect-bar { display: none; }
-      .logo-block { margin-bottom: 8px; }
-      .logo-img, .logo-fallback { width: 42px; height: 42px; margin-bottom: 6px; }
-      .divider { display: none; }
+    @media (max-height: 680px) {
+      .logo-img { width: 54px; height: 54px; margin-bottom: 8px; }
+      .logo-block { margin-bottom: 10px; }
+      .divider { margin: 8px auto; }
       .links { gap: 4px; }
-      .link-card { padding: 8px 12px; }
+      .link-card { padding: 8px 14px; }
+      .footer-text { margin-top: 8px; }
+    }
+    @media (max-height: 600px) {
+      .logo-img { width: 44px; height: 44px; }
+      .company-sub { display: none; }
+      .divider { margin: 6px auto; }
+      .footer-text { display: none; }
+      .link-meta { display: none; }
+    }
+    @media (max-height: 530px) {
+      .redirect-bar { display: none; }
+      .divider { display: none; }
     }
 
   </style>
@@ -301,9 +296,9 @@
 
     <div class="divider"></div>
 
-    <!-- Links -->
     <div class="links">
 
+      <!-- Website -->
       <a href="https://www.tgmetalcraft.com" target="_blank" class="link-card">
         <div class="link-icon">
           <svg viewBox="0 0 48 48" fill="none">
@@ -314,21 +309,59 @@
             <line x1="7" y1="33" x2="41" y2="33" stroke="#2a54b7" stroke-width="1.3"/>
           </svg>
         </div>
-        <span class="link-name">Website</span>
+        <div class="link-text">
+          <span class="link-name">Website</span>
+          <span class="link-meta">www.tgmetalcraft.com</span>
+        </div>
         <span class="link-arrow">→</span>
       </a>
 
-      <a href="https://Wa.me/+918077887830" target="_blank" class="link-card">
+      <!-- WhatsApp -->
+      <a href="https://wa.me/+918077887830" target="_blank" class="link-card">
         <div class="link-icon">
           <svg viewBox="0 0 48 48" fill="none">
             <path d="M24 4C13 4 4 13 4 24c0 3.6.97 7 2.65 9.9L4 44l10.4-2.7A19.94 19.94 0 0024 44c11 0 20-9 20-20S35 4 24 4z" fill="#25D366"/>
             <path d="M35 29.2c-.5-.25-2.9-1.43-3.35-1.6-.45-.16-.77-.24-1.1.25-.32.5-1.26 1.6-1.55 1.92-.28.33-.57.37-1.06.12-.5-.25-2.1-.77-4-2.46-1.47-1.3-2.47-2.92-2.76-3.41-.28-.5-.03-.76.22-1.01.22-.22.5-.57.74-.86.24-.28.32-.5.48-.82.16-.33.08-.62-.04-.87-.12-.24-1.1-2.64-1.5-3.62-.4-.94-.8-.82-1.1-.83h-.93c-.32 0-.83.12-1.27.6-.43.48-1.66 1.62-1.66 3.96s1.7 4.59 1.94 4.91c.24.32 3.35 5.1 8.1 7.16.96.41 1.7.66 2.28.84.96.3 1.83.26 2.52.16.77-.11 2.37-.97 2.7-1.9.33-.94.33-1.74.23-1.9-.1-.18-.42-.3-.9-.54z" fill="white"/>
           </svg>
         </div>
-        <span class="link-name">WhatsApp</span>
+        <div class="link-text">
+          <span class="link-name">WhatsApp</span>
+          <span class="link-meta">+91 80778 87830</span>
+        </div>
         <span class="link-arrow">→</span>
       </a>
 
+      <!-- Sales Email -->
+      <a href="mailto:sales@tgmetalcraft.com" class="link-card">
+        <div class="link-icon">
+          <svg viewBox="0 0 48 48" fill="none">
+            <rect x="4" y="10" width="40" height="28" rx="3" stroke="#2a54b7" stroke-width="2.2" fill="none"/>
+            <path d="M4 14l20 13 20-13" stroke="#2a54b7" stroke-width="2" stroke-linecap="round" fill="none"/>
+          </svg>
+        </div>
+        <div class="link-text">
+          <span class="link-name">Sales Enquiry</span>
+          <span class="link-meta">sales@tgmetalcraft.com</span>
+        </div>
+        <span class="link-arrow">→</span>
+      </a>
+
+      <!-- Info Email -->
+      <a href="mailto:info@tgmetalcraft.com" class="link-card">
+        <div class="link-icon">
+          <svg viewBox="0 0 48 48" fill="none">
+            <rect x="4" y="10" width="40" height="28" rx="3" stroke="#5b8fff" stroke-width="2.2" fill="none"/>
+            <path d="M4 14l20 13 20-13" stroke="#5b8fff" stroke-width="2" stroke-linecap="round" fill="none"/>
+          </svg>
+        </div>
+        <div class="link-text">
+          <span class="link-name">General Info</span>
+          <span class="link-meta">info@tgmetalcraft.com</span>
+        </div>
+        <span class="link-arrow">→</span>
+      </a>
+
+      <!-- Instagram -->
       <a href="https://www.instagram.com/tg_germanmetalcraft/profilecard/?igsh=MWMwcTJlYng1ZG9kMQ==" target="_blank" class="link-card">
         <div class="link-icon">
           <svg viewBox="0 0 48 48" fill="none">
@@ -349,10 +382,14 @@
             <circle cx="35" cy="13" r="2.5" fill="white"/>
           </svg>
         </div>
-        <span class="link-name">Instagram</span>
+        <div class="link-text">
+          <span class="link-name">Instagram</span>
+          <span class="link-meta">@tg_germanmetalcraft</span>
+        </div>
         <span class="link-arrow">→</span>
       </a>
 
+      <!-- Facebook -->
       <a href="https://www.facebook.com/share/16itsnsCTs/" target="_blank" class="link-card">
         <div class="link-icon">
           <svg viewBox="0 0 48 48" fill="none">
@@ -360,10 +397,13 @@
             <path d="M31 9h-4a7 7 0 00-7 7v4h-4v6h4v14h6V26h4l1-6h-5v-3a1 1 0 011-1h4V9z" fill="white"/>
           </svg>
         </div>
-        <span class="link-name">Facebook</span>
+        <div class="link-text">
+          <span class="link-name">Facebook</span>
+        </div>
         <span class="link-arrow">→</span>
       </a>
 
+      <!-- Location -->
       <a href="https://maps.app.goo.gl/5fDtDsxV2wagqL956" target="_blank" class="link-card">
         <div class="link-icon">
           <svg viewBox="0 0 48 48" fill="none">
@@ -371,10 +411,14 @@
             <circle cx="24" cy="18" r="5.5" fill="white"/>
           </svg>
         </div>
-        <span class="link-name">Location</span>
+        <div class="link-text">
+          <span class="link-name">Our Location</span>
+          <span class="link-meta">View on Google Maps</span>
+        </div>
         <span class="link-arrow">→</span>
       </a>
 
+      <!-- Google Page -->
       <a href="https://share.google/qTNzDhfnwqQyn6JeO" target="_blank" class="link-card">
         <div class="link-icon">
           <svg viewBox="0 0 48 48" fill="none">
@@ -384,7 +428,10 @@
             <path d="M43.6 20H24v8h11.3c-.8 2.3-2.3 4.3-4.3 5.7l6.3 5.2C41.4 35.4 44 31 44 26c0-1-.1-2-.4-6z" fill="#FBBC05"/>
           </svg>
         </div>
-        <span class="link-name">Google Page</span>
+        <div class="link-text">
+          <span class="link-name">Google Page</span>
+          <span class="link-meta">Reviews &amp; Business Profile</span>
+        </div>
         <span class="link-arrow">→</span>
       </a>
 
@@ -396,7 +443,8 @@
 
   <script>
     (function () {
-      var WEBSITE = 'https://tggerman.vercel.app/';
+      /* ✅ Corrected redirect URL */
+      var WEBSITE = 'https://www.tgmetalcraft.com';
       var secs = 5;
       var cancelled = false;
       var countEl = document.getElementById('countdown');
@@ -418,7 +466,7 @@
         if (progEl) { progEl.style.animation = 'none'; progEl.style.transform = 'scaleX(0)'; }
         if (barEl) {
           barEl.style.background = 'rgba(10,12,16,0.92)';
-          barEl.style.borderBottomColor = 'rgba(42,84,183,0.15)';
+          barEl.style.borderTopColor = 'rgba(42,84,183,0.15)';
           var t = barEl.querySelector('.redirect-text');
           var b = barEl.querySelector('.redirect-cancel');
           if (t) t.innerHTML = '<span style="letter-spacing:2px;color:#4a5a6c">REDIRECT CANCELLED</span>';
